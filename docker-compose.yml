@@ -1,0 +1,24 @@
+services:
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: rehnumai
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - rehnumai-mongo:/data/db
+  web:
+    build: .
+    depends_on:
+      - mongo
+    environment:
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mongo:27017
+      MONGODB_DB: rehnumai
+      SESSION_COOKIE_NAME: rehnumai_session
+      SESSION_SECRET: change-me-with-a-random-32-character-secret
+    ports:
+      - "3000:3000"
+volumes:
+  rehnumai-mongo:

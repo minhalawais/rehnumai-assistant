@@ -1,0 +1,40 @@
+{
+  "name": "migration-intake",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:ping": "node --env-file=.env.local scripts/ping.mjs",
+    "db:indexes": "node --env-file=.env.local scripts/indexes.mjs",
+    "db:seed": "node --env-file=.env.local scripts/seed.mjs",
+    "postinstall": "node scripts/copy-pdf-worker.mjs",
+    "test:booklet-index": "node scripts/verify-booklet-index.mjs",
+    "test:booklet-index:e2e": "node scripts/e2e-booklet-index.mjs"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/noto-sans-arabic": "^5.3.0",
+    "argon2": "^0.45.2",
+    "lucide-react": "^1.70.0",
+    "mongodb": "^7.8.0",
+    "next": "16.4.5",
+    "pdfjs-dist": "^6.5.438",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.5",
+    "playwright": "^1.65.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
