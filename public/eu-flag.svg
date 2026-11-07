@@ -1,0 +1,9 @@
+<svg width="160" height="96" viewBox="0 0 160 96" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">European Union</title>
+  <desc id="desc">European Union blue flag with a circle of gold stars</desc>
+  <rect width="160" height="96" rx="2" fill="#003399"/>
+  <g fill="#FFCC00" transform="translate(80 48)">
+    <g id="s"><path d="M0-28 2.4-21.1 9.5-21.1 3.8-16.8 6-10 0-14.2-6-10-3.8-16.8-9.5-21.1-2.4-21.1Z"/></g>
+    <use href="#s" transform="rotate(30)"/><use href="#s" transform="rotate(60)"/><use href="#s" transform="rotate(90)"/><use href="#s" transform="rotate(120)"/><use href="#s" transform="rotate(150)"/><use href="#s" transform="rotate(180)"/><use href="#s" transform="rotate(210)"/><use href="#s" transform="rotate(240)"/><use href="#s" transform="rotate(270)"/><use href="#s" transform="rotate(300)"/><use href="#s" transform="rotate(330)"/>
+  </g>
+</svg>

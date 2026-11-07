@@ -1,0 +1,14 @@
+import { MongoClient } from "mongodb";
+import argon2 from "argon2";
+import { mongoClientOptions } from "./mongo-options.mjs";
+const uri = process.env.MONGODB_URI;
+if (!uri) throw new Error("MONGODB_URI is required");
+if (process.env.NODE_ENV === "production") throw new Error("Seed is disabled in production");
+const client = new MongoClient(uri, mongoClientOptions());
+await client.connect();
+const db = client.db(process.env.MONGODB_DB || "rehnumai");
+const now = new Date();
+const tenantId = "demo-tenant";
+const passwordHash = await argon2.hash("ChangeMe-For-Local-Only-2026!", { type: argon2.argon2id });
+await db.collection("users").updateOne({ tenantId, emailNormalized: "demo@rehnumai.local" }, { $set: { name: "Ayesha Siddiqua", emailNormalized: "demo@rehnumai.local", passwordHash, status: "active", roles: [{ role: "case_manager", teamIds: ["lahore-team"], locationIds: ["lahore-center"], fieldClearance: "P3" }], updatedAt: now }, $setOnInsert: { tenantId, createdAt: now } }, { upsert: true });
+console.log("Seeded local user: demo@rehnumai.local (change password immediately)"); await client.close();

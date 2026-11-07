@@ -1,0 +1,13 @@
+{
+  "name": "Rehnumai Safe Migration Intake",
+  "short_name": "Rehnumai",
+  "description": "Migration readiness and case review workspace.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f8fa",
+  "theme_color": "#073b5c",
+  "icons": [
+    { "src": "/brand/rehnumai-app-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/brand/rehnumai-app-icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
