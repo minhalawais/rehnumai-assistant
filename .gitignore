@@ -39,6 +39,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Generated from pdfjs-dist on postinstall (see scripts/copy-pdf-worker.mjs)
+/public/cmaps/
+/public/standard_fonts/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,7 +1,17 @@
 import type { PDFDocumentProxy } from "pdfjs-dist";
+import { BOOKLET_PDF_PATH } from "@/lib/booklet";
 
 export const BOOKLET_PAGE_GAP_PX = 10;
 export const BOOKLET_PAGES_PADDING_PX = 10;
+
+/** Chromium PDF open parameters — hide built-in toolbar/side panes where supported. */
+export const BOOKLET_NATIVE_PDF_HASH = "toolbar=0&navpanes=0&scrollbar=0";
+
+export function bookletNativePdfSrc(page = 1): string {
+  const path = BOOKLET_PDF_PATH.split("#")[0];
+  const hash = `${BOOKLET_NATIVE_PDF_HASH}${page > 1 ? `&page=${page}` : ""}`;
+  return `${path}#${hash}`;
+}
 
 /** Pixel heights per PDF page at the given render width (1-based page numbers). */
 export async function measureBookletPageHeights(pdf: PDFDocumentProxy, width: number): Promise<Map<number, number>> {

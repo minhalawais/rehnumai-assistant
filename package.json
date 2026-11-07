@@ -12,7 +12,8 @@
     "db:seed": "node --env-file=.env.local scripts/seed.mjs",
     "postinstall": "node scripts/copy-pdf-worker.mjs",
     "test:booklet-index": "node scripts/verify-booklet-index.mjs",
-    "test:booklet-index:e2e": "node scripts/e2e-booklet-index.mjs"
+    "test:booklet-index:e2e": "node scripts/e2e-booklet-index.mjs",
+    "test:booklet-pdf:e2e": "node scripts/e2e-booklet-pdf.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
