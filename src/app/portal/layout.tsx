@@ -1,6 +1,10 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { getSession, sessionHasRole } from "@/lib/auth";
+import { portalMetadata } from "@/lib/page-metadata";
+
+export const metadata: Metadata = portalMetadata;
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   await connection();

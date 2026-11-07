@@ -105,6 +105,8 @@ The seed account is `demo@rehnumai.local` with password `ChangeMe-For-Local-Only
 - Redacted structured errors and audit event inserts for authentication/case creation.
 - Security headers in `next.config.ts`.
 
+Before your first production deploy, follow **[DEPLOY.md](./DEPLOY.md)** (env vars, Atlas indexes, smoke tests, favicons/metadata).
+
 ## Deploy to Vercel
 
 1. Push this repository to GitHub and import it in [Vercel](https://vercel.com/new).
@@ -118,6 +120,7 @@ The seed account is `demo@rehnumai.local` with password `ChangeMe-For-Local-Only
 | `SESSION_SECRET` | Yes | 32+ random characters |
 | `SESSION_COOKIE_NAME` | No | Default `rehnumai_session` |
 | `PUBLIC_INTAKE_TENANT_ID` | No | Default `demo-tenant` |
+| `NEXT_PUBLIC_APP_URL` | Yes (prod) | `https://your-app.vercel.app` — tab/OG URLs and sitemap |
 | `NODE_ENV` | Set by Vercel | `production` on Production |
 
 4. After first deploy, run **`npm run db:indexes`** locally against the same `MONGODB_URI` (or use Atlas UI). Create staff users through your ops process; do not run `db:seed` on production.
