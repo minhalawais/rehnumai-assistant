@@ -51,6 +51,18 @@ async function testDesktopNative(browser, base) {
     throw new Error(`Desktop index should set page hash; src=${src1}`);
   }
 
+  await page.getByTestId("booklet-fullscreen-open").click();
+  await page.locator("#booklet-reader-fullscreen-dialog").waitFor({ state: "visible", timeout: 15_000 });
+  const pageText0 = await page.locator(".booklet-reader-fullscreen__pages").innerText();
+  await page.keyboard.press("ArrowRight");
+  await page.waitForTimeout(500);
+  const pageText1 = await page.locator(".booklet-reader-fullscreen__pages").innerText();
+  if (pageText0 === pageText1) {
+    throw new Error(`Fullscreen pager did not advance on desktop; still "${pageText0}"`);
+  }
+  await page.keyboard.press("Escape");
+  await page.locator("#booklet-reader-fullscreen-dialog").waitFor({ state: "hidden", timeout: 10_000 });
+
   console.log("e2e-booklet-pdf: desktop native OK");
   await page.close();
 }
@@ -86,6 +98,20 @@ async function testMobileCanvas(browser, base) {
   if (scrollTop < 30) {
     throw new Error(`Mobile index did not scroll PDF; scrollTop=${scrollTop}`);
   }
+
+  await page.getByTestId("booklet-fullscreen-open").click();
+  await page.locator("#booklet-reader-fullscreen-dialog").waitFor({ state: "visible", timeout: 15_000 });
+  const track = page.getByTestId("booklet-fullscreen-track");
+  await track.waitFor({ state: "visible" });
+  const pageText0 = await page.locator(".booklet-reader-fullscreen__pages").innerText();
+  await page.keyboard.press("ArrowRight");
+  await page.waitForTimeout(800);
+  const pageText1 = await page.locator(".booklet-reader-fullscreen__pages").innerText();
+  if (pageText0 === pageText1) {
+    throw new Error(`Fullscreen pager did not advance on mobile; still "${pageText0}"`);
+  }
+  await page.keyboard.press("Escape");
+  await page.locator("#booklet-reader-fullscreen-dialog").waitFor({ state: "hidden", timeout: 10_000 });
 
   console.log("e2e-booklet-pdf: mobile canvas OK");
   await page.close();

@@ -1,13 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Maximize2 } from "lucide-react";
 import { copy, useLocale } from "@/components/locale";
 import { BookletIndexBar, BookletIndexContents, BookletIndexPanel } from "@/components/booklet-index-panel";
+import { BookletPdfPage, BOOKLET_FULLSCREEN_DIALOG_ID } from "@/components/booklet-pdf-page";
+import { BookletReaderFullscreen } from "@/components/booklet-reader-fullscreen";
 import { BOOKLET_PAGE_COUNT } from "@/lib/booklet";
 import { loadBookletPdfDocument } from "@/lib/booklet-pdf";
 import { BOOKLET_INDEX_SESSION_KEY } from "@/lib/booklet-index";
 import { bookletNativePdfSrc, bookletScrollTopForPage, measureBookletPageHeights } from "@/lib/booklet-page-layout";
-import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
+import type { PDFDocumentProxy } from "pdfjs-dist";
 import { GlobalWorkerOptions } from "pdfjs-dist";
 
 GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
@@ -55,62 +58,6 @@ function useDesktopNativePdf() {
   return native;
 }
 
-function BookletPdfPage({ pdf, pageNumber, width, language }: { pdf: PDFDocumentProxy; pageNumber: number; width: number; language: "ur" | "en" }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const renderTaskRef = useRef<RenderTask | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    const canvas = canvasRef.current;
-
-    renderTaskRef.current?.cancel();
-    renderTaskRef.current = null;
-
-    if (!canvas || width < 1) return;
-
-    void pdf.getPage(pageNumber).then(page => {
-      if (cancelled) return;
-
-      const outputScale = Math.min(window.devicePixelRatio || 1, 2);
-      const base = page.getViewport({ scale: 1 });
-      const scale = width / base.width;
-      const viewport = page.getViewport({ scale: scale * outputScale });
-      const ctx = canvas.getContext("2d");
-      if (!ctx || cancelled) return;
-
-      const layoutViewport = page.getViewport({ scale });
-      canvas.width = Math.floor(viewport.width);
-      canvas.height = Math.floor(viewport.height);
-      canvas.style.width = `${Math.floor(layoutViewport.width)}px`;
-      canvas.style.height = `${Math.floor(layoutViewport.height)}px`;
-
-      const task = page.render({ canvas, canvasContext: ctx, viewport });
-      renderTaskRef.current = task;
-      void task.promise
-        .catch(() => undefined)
-        .finally(() => {
-          if (renderTaskRef.current === task) renderTaskRef.current = null;
-        });
-    });
-
-    return () => {
-      cancelled = true;
-      renderTaskRef.current?.cancel();
-      renderTaskRef.current = null;
-    };
-  }, [pdf, pageNumber, width]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      dir="ltr"
-      className="booklet-viewer__page"
-      role="img"
-      aria-label={copy(language, `Booklet page ${pageNumber}`, `کتابچے کا صفحہ ${pageNumber}`)}
-    />
-  );
-}
-
 /**
  * Desktop (≥1024px): Chromium PDF embed — correct Urdu, toolbar hidden via URL hash.
  * Mobile: PDF.js canvas with LTR isolation (site `dir=rtl` breaks canvas text otherwise).
@@ -118,6 +65,7 @@ function BookletPdfPage({ pdf, pageNumber, width, language }: { pdf: PDFDocument
 export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
   const { language } = useLocale();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const expandRef = useRef<HTMLButtonElement>(null);
   const pageRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null);
   const [pageCount, setPageCount] = useState(BOOKLET_PAGE_COUNT);
@@ -126,6 +74,7 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [indexOpen, setIndexOpen] = useState(false);
   const [activePage, setActivePage] = useState(1);
+  const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [nativePdfSrc, setNativePdfSrc] = useState(() => bookletNativePdfSrc(1));
   const pendingScrollPage = useRef<number | null>(null);
   const sideNav = useDesktopSideNav(variant === "home");
@@ -289,6 +238,22 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
     setIndexOpen(false);
   }
 
+  function handleFullscreenPageChange(page: number) {
+    setActivePage(page);
+    if (useNativePdf) {
+      setNativePdfSrc(bookletNativePdfSrc(page));
+    } else {
+      pendingScrollPage.current = page;
+      queueMicrotask(() => runPendingScroll());
+    }
+  }
+
+  function closeFullscreen() {
+    setFullscreenOpen(false);
+    pendingScrollPage.current = activePage;
+    queueMicrotask(() => runPendingScroll());
+  }
+
   const label = copy(language, "Migration booklet", "مائیگریشن کتابچہ");
   const viewerClass = [
     "booklet-viewer",
@@ -297,13 +262,29 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
     useNativePdf ? "booklet-viewer--native" : "",
   ].filter(Boolean).join(" ");
 
+  const canExpand = state === "ready" || useNativePdf;
+
   const pdfPane = (
     <>
       {!sideNav && !indexOpen && <BookletIndexBar onOpen={openIndex} />}
-      {state === "ready" && (sideNav || !indexOpen) && (
-        <p className="booklet-viewer__page-indicator" aria-live="polite">
-          {copy(language, `Page ${activePage} of ${pageCount || BOOKLET_PAGE_COUNT}`, `صفحہ ${activePage} از ${pageCount || BOOKLET_PAGE_COUNT}`)}
-        </p>
+      {canExpand && (sideNav || !indexOpen) && (
+        <div className="booklet-viewer__page-indicator">
+          <span aria-live="polite">
+            {copy(language, `Page ${activePage} of ${pageCount || BOOKLET_PAGE_COUNT}`, `صفحہ ${activePage} از ${pageCount || BOOKLET_PAGE_COUNT}`)}
+          </span>
+          <button
+            ref={expandRef}
+            type="button"
+            className="booklet-viewer__expand btn-quiet"
+            data-testid="booklet-fullscreen-open"
+            aria-expanded={fullscreenOpen}
+            aria-controls={BOOKLET_FULLSCREEN_DIALOG_ID}
+            aria-label={copy(language, "Full screen", "پوری اسکرین")}
+            onClick={() => setFullscreenOpen(true)}
+          >
+            <Maximize2 size={18} aria-hidden="true" />
+          </button>
+        </div>
       )}
       <div className="booklet-viewer__stage">
         <div
@@ -366,6 +347,17 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
         <BookletIndexContents layout="rail" activePage={activePage} onSelectPage={scrollToPage} />
       )}
       <div className="booklet-viewer__pdf-pane">{pdfPane}</div>
+      <BookletReaderFullscreen
+        open={fullscreenOpen}
+        onClose={closeFullscreen}
+        page={activePage}
+        pageCount={pageCount}
+        onPageChange={handleFullscreenPageChange}
+        useNativePdf={useNativePdf}
+        pdf={pdf}
+        bookletLabel={label}
+        returnFocusRef={expandRef}
+      />
     </section>
   );
 }
