@@ -95,7 +95,7 @@ export function IntakeEntryModal({ open, onClose, onSubmitted }: Props) {
         ) : (
           <>
             <header className="intake-modal__form-head">
-              <div className="min-w-0 flex-1">
+              <div className="intake-modal__form-head-copy min-w-0 flex-1">
                 <p className="intake-modal__eyebrow">{copy(language, "Step by step", "قدم بہ قدم")}</p>
                 <h2 id={titleId} className="intake-modal__title intake-modal__title--sm">
                   {copy(language, "Migration form", "مائیگریشن فارم")}

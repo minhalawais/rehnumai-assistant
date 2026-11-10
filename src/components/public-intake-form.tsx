@@ -134,10 +134,8 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss }: PublicInta
 
   return (
     <>
-      {!modalOnly && (
-        <MobileIntake form={form} update={update} language={language} canWriteRestricted={false} publicMode saveState={saveState} error={error} correctionReason="" attested={attested} setAttested={setAttested} onSave={save} onExit={() => undefined} />
-      )}
-      <div className={`desktop-intake intake-wizard ${modalOnly ? "intake-wizard--modal" : ""} mx-auto max-w-[900px]`}>
+      <MobileIntake form={form} update={update} language={language} canWriteRestricted={false} publicMode saveState={saveState} error={error} correctionReason="" attested={attested} setAttested={setAttested} onSave={save} onExit={() => undefined} />
+      <div className={`desktop-intake intake-wizard ${modalOnly ? "intake-wizard--modal hidden lg:block" : ""} mx-auto max-w-[900px]`}>
         <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
           <div>
             <p className="text-xs font-semibold text-[var(--teal-700)]">{copy(language, `Step ${step + 1} of ${stepNames.length}`, `مرحلہ ${step + 1} از ${stepNames.length}`)}</p>
