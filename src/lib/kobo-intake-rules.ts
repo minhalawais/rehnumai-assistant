@@ -28,6 +28,7 @@ const ALL_ANSWER_KEYS: (keyof IntakeAnswers)[] = [
   "qualification",
   "tradeSkill",
   ...RETURN_BLOCK_KEYS,
+  "helpTopics",
   "bankAccountMode",
   "bankRelation",
   "bankName",

@@ -8,7 +8,7 @@ export default function AccountHelpPage() {
   const { language } = useLocale();
 
   return <main id="main-content" className="information-page mx-auto max-w-2xl px-5 py-10 sm:py-16">
-    <div className="flex items-center justify-between gap-4"><Link href="/" aria-label={copy(language, "Rehnumai home", "رہنمائی کا صفحۂ آغاز")}><BrandLockup compact /></Link><LanguageSwitch /></div>
+    <div className="flex items-center justify-between gap-4"><Link href="/" aria-label={copy(language, "Manzil home", "منزل کا صفحۂ آغاز")}><BrandLockup compact /></Link><LanguageSwitch /></div>
     <Link href="/login" className="mt-12 inline-block text-sm font-semibold text-[var(--teal-700)]">{copy(language, "Back to login", "لاگ اِن کے صفحے پر واپس")}</Link>
     <h1 className="mt-8 text-3xl font-semibold text-[var(--navy-950)]">{copy(language, "Sign-in and password help", "لاگ اِن اور پاس ورڈ میں مدد")}</h1>
     <p className="mt-5 leading-8 text-[var(--ink-700)]">{copy(language, "Staff accounts are managed by your organization. There is no online password reset in Rehnumai yet.", "عملے کے اکاؤنٹ آپ کے ادارے کے پاس ہیں۔ ابھی یہاں سے پاس ورڈ آن لائن تبدیل نہیں ہو سکتا۔")}</p>

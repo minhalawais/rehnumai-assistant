@@ -6,10 +6,9 @@ import { useEffect, useId, useRef, useState } from "react";
 import { copy, type Language, useLocale } from "@/components/locale";
 import { apiWrite } from "@/lib/client-api";
 import {
-  bankAccountModeOptions,
-  bankRelationOptions,
   currentStatusOptions,
   genderOptions,
+  helpTopicOptions,
   initialIntake as initial,
   intakeSteps as stepNames,
   maritalStatusOptions,
@@ -35,16 +34,17 @@ function questionLabel(language: Language, key: keyof typeof intakeQuestionCopy)
 }
 
 export type PublicIntakeFormProps = {
-  surface: "page" | "modal";
+  surface: "page" | "modal" | "launch";
   onSubmitted?: (reference: string) => void;
   onDeclined?: () => void;
   onDismiss?: () => void;
   onProgressChange?: (state: { dirty: boolean; submitted: boolean }) => void;
+  doneLabel?: { en: string; ur: string };
 };
 
 const LAST_STEP = stepNames.length - 1;
 
-export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressChange }: PublicIntakeFormProps) {
+export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressChange, doneLabel }: PublicIntakeFormProps) {
   const { language } = useLocale();
   const [form, setForm] = useState<Answers>(initial);
   const [step, setStep] = useState(0);
@@ -57,6 +57,7 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressCh
   const requestKey = useRef("");
   const errorRef = useRef<HTMLDivElement>(null);
   const modalOnly = surface === "modal";
+  const launch = surface === "launch";
 
   const [copyHint, setCopyHint] = useState("");
 
@@ -153,13 +154,17 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressCh
         return;
       }
     }
+    if (step === 6 && form.helpTopics.length === 0) {
+      setError(copy(language, "Choose at least one kind of information.", "کم از کم ایک قسم کی معلومات چنیں۔"));
+      return;
+    }
     setError("");
     setStep(current => {
       let n = Math.min(current + 1, LAST_STEP);
       if (form.migrantCategory === "potential_migrants" && n === 5) n = 6;
       return n;
     });
-    if (!modalOnly) window.scrollTo({ top: 0, behavior: "smooth" });
+    if (surface === "page") window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function prevStep() {
@@ -192,8 +197,8 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressCh
           {copyHint ? <span className="text-xs text-[var(--teal-700)]" role="status">{copyHint}</span> : null}
         </div>
         <div className="mt-6 flex flex-wrap gap-2">
-          {modalOnly ? (
-            <button type="button" className="btn-primary" onClick={onDismiss}>{copy(language, "Back to booklet", "کتابچہ پر واپس جائیں")}</button>
+          {modalOnly || launch ? (
+            <button type="button" className="btn-primary" onClick={onDismiss}>{doneLabel ? copy(language, doneLabel.en, doneLabel.ur) : copy(language, "Back to booklet", "کتابچہ پر واپس جائیں")}</button>
           ) : (
             <Link href="/" className="btn-primary">{copy(language, "Read the booklet", "کتابچہ پڑھیں")}</Link>
           )}
@@ -206,7 +211,8 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressCh
 
   return (
     <>
-      <MobileIntake form={form} update={update} language={language} canWriteRestricted={false} publicMode saveState={saveState} error={error} correctionReason="" attested={attested} setAttested={setAttested} onSave={save} onExit={() => undefined} />
+      <MobileIntake form={form} update={update} language={language} canWriteRestricted={false} publicMode fillPage={launch} saveState={saveState} error={error} correctionReason="" attested={attested} setAttested={setAttested} onSave={save} onExit={() => undefined} />
+      {!launch && (
       <div className={`desktop-intake intake-wizard ${modalOnly ? "intake-wizard--modal hidden lg:block" : ""} mx-auto max-w-[900px]`}>
         <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
           <div>
@@ -270,13 +276,26 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressCh
               )
             )}
             {step === 6 && (
-              <div className="grid gap-5 sm:grid-cols-2">
-                <SelectField label={questionLabel(language, "bankAccountMode")} value={form.bankAccountMode} onChange={value => update("bankAccountMode", value)} options={bankAccountModeOptions} language={language} />
-                <SelectField label={questionLabel(language, "bankRelation")} value={form.bankRelation} onChange={value => update("bankRelation", value)} options={bankRelationOptions} language={language} />
-                <TextField label={questionLabel(language, "bankName")} value={form.bankName} onChange={value => update("bankName", value)} />
-                <TextField label={questionLabel(language, "accountTitle")} value={form.accountTitle} onChange={value => update("accountTitle", value)} />
-                <TextField label={questionLabel(language, "iban")} value={form.iban} onChange={value => update("iban", value)} className="sm:col-span-2" />
-              </div>
+              <fieldset>
+                <legend className="field-label mb-3">{questionLabel(language, "helpTopics")}</legend>
+                <p className="field-help mb-3">{copy(language, "Choose one or more.", "ایک سے زیادہ چن سکتے ہیں۔")}</p>
+                <div className="space-y-2">
+                  {helpTopicOptions.map(([key, en, ur]) => (
+                    <label key={key} className={`flex min-h-10 cursor-pointer items-center gap-3 rounded-[9px] border px-3 text-sm ${form.helpTopics.includes(key) ? "border-[var(--teal-700)] bg-[var(--teal-100)]" : "border-[var(--line)] bg-white"}`}>
+                      <input
+                        type="checkbox"
+                        className="accent-[var(--teal-700)]"
+                        checked={form.helpTopics.includes(key)}
+                        onChange={() => {
+                          const next = form.helpTopics.includes(key) ? form.helpTopics.filter(item => item !== key) : [...form.helpTopics, key];
+                          update("helpTopics", next);
+                        }}
+                      />
+                      {copy(language, en, ur)}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
             )}
             {step === 7 && (
               <div className="space-y-5">
@@ -309,6 +328,7 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressCh
           </div>
         </section>
       </div>
+      )}
     </>
   );
 }

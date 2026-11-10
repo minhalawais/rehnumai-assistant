@@ -30,7 +30,7 @@ export function BookletHome() {
 
       <footer className="public-page__footer border-t border-[var(--line)] bg-white py-4">
         <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-3 px-5 text-sm text-[var(--ink-700)] sm:px-8">
-          <span>© Rehnumai</span>
+          <span>© Manzil</span>
           <div className="flex flex-wrap items-center gap-4">
             <PublicIntakeReferenceLink />
             <Link href="/privacy" className="font-semibold text-[var(--navy-900)]">{copy(language, "Privacy", "رازداری")}</Link>

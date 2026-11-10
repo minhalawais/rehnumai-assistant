@@ -2,10 +2,9 @@
 
 import { copy, type Language } from "@/components/locale";
 import {
-  bankAccountModeOptions,
-  bankRelationOptions,
   currentStatusOptions,
   genderOptions,
+  helpTopicOptions,
   maritalStatusOptions,
   qualificationOptions,
   reasonForReturningOptions,
@@ -24,11 +23,16 @@ const FIELD_GROUPS: { step: number; keys: (keyof IntakeAnswers)[] }[] = [
   { step: 3, keys: ["cnic", "passportNo", "passportNoAlt"] },
   { step: 4, keys: ["qualification", "tradeSkill"] },
   { step: 5, keys: [...RETURN_BLOCK_KEYS] },
-  { step: 6, keys: ["bankAccountMode", "bankRelation", "bankName", "accountTitle", "iban"] },
+  { step: 6, keys: ["helpTopics"] },
 ];
 
 function displayValue(key: keyof IntakeAnswers, form: IntakeAnswers, language: Language): string {
   const raw = form[key];
+  if (key === "helpTopics") {
+    if (!form.helpTopics.length) return "—";
+    const joiner = language === "ur" ? "، " : ", ";
+    return form.helpTopics.map(value => localizedChoice(value, helpTopicOptions, language)).join(joiner);
+  }
   if (!raw || (typeof raw === "string" && !raw.trim())) return "—";
   if (key === "migrantCategory") return localizedMigrantCategory(String(raw), language);
   const optionMaps: Partial<Record<keyof IntakeAnswers, readonly (readonly [string, string, string])[]>> = {
@@ -38,8 +42,6 @@ function displayValue(key: keyof IntakeAnswers, form: IntakeAnswers, language: L
     qualification: qualificationOptions,
     reasonForReturning: reasonForReturningOptions,
     currentStatus: currentStatusOptions,
-    bankAccountMode: bankAccountModeOptions,
-    bankRelation: bankRelationOptions,
   };
   const options = optionMaps[key];
   if (options) return localizedChoice(String(raw), options, language);
@@ -94,11 +96,7 @@ const QUESTION_ID_BY_KEY: Partial<Record<keyof IntakeAnswers, string>> = {
   reasonForReturning: "reason-return",
   dateOfReturn: "date-return",
   currentStatus: "current-status",
-  bankAccountMode: "bank-mode",
-  bankRelation: "bank-relation",
-  bankName: "bank-name",
-  accountTitle: "account-title",
-  iban: "iban",
+  helpTopics: "help-topics",
 };
 
 export function IntakeReviewSummary({ form, language, variant, onEditStep, onEditQuestionId }: Props) {

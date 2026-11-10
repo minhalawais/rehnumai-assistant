@@ -22,7 +22,7 @@ export function PublicSiteHeader({ showStaffSignIn = true, trailing, maxWidth = 
     <header className="public-site-header sticky top-0 z-20 border-b border-[var(--line)] bg-white/95 backdrop-blur-sm">
       <div className={`public-site-header__inner mx-auto px-5 sm:px-8 ${widthClass[maxWidth]}`}>
         <div className="public-site-header__bar flex items-center justify-between gap-3">
-          <Link href="/" aria-label={copy(language, "Rehnumai home", "رہنمائی کا صفحۂ آغاز")}>
+          <Link href="/" aria-label={copy(language, "Manzil home", "منزل کا صفحۂ آغاز")}>
             <BrandLockup compact className="public-site-header__brand" />
           </Link>
           <div className="public-site-header__partners-inline">

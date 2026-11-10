@@ -61,6 +61,20 @@ export const currentStatusOptions = [
   ["other", "Other", "کچھ اور"],
 ] as const;
 
+export const helpTopicOptions = [
+  ["going-abroad", "Information about going abroad", "بیرون ممالک جانے کے بارے میں معلومات"],
+  ["skills", "Information about skills", "ہنر سے متعلق معلومات"],
+  ["passport-info", "Information about passports", "پاسپورٹ سے متعلق معلومات"],
+  ["cv", "How to prepare a CV", "CV بنانے کا طریقہ"],
+  ["languages", "Information about learning languages", "زبانیں سیکھنے کے بارے میں معلومات"],
+  ["agent", "Information about a reliable agent", "اچھے ایجنٹ کے بارے میں معلومات"],
+  ["job-search", "Job search", "ملازمت کی تلاش"],
+  ["culture", "Information about culture in other countries", "دوسرے ممالک کے کلچر کے بارے میں معلومات"],
+  ["departure", "Information about departure abroad", "بیرون ملک روانگی کے بارے میں معلومات"],
+  ["airport", "Information about airports in other countries", "دوسرے ممالک کے ایرپورٹ کے بارے میں معلومات"],
+  ["remittance", "Legal ways to send money", "رقوم کی ترسیل کے قانونی طریقے"],
+] as const;
+
 export const bankAccountModeOptions = [
   ["own", "Yes — my own bank account", "جی ہاں، میرا اپنا اکاؤنٹ"],
   ["other", "No — another person's account", "نہیں، کسی اور کا اکاؤنٹ"],

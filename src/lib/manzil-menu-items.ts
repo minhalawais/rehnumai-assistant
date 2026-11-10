@@ -148,7 +148,7 @@ export function findManzilIndex(id: string) {
 
 export const MANZIL_MENU_DOCK = [
   { id: "home", href: "/", icon: "home" as const, labelEn: "Home", labelUr: "گھر" },
-  { id: "booklet", href: "/booklet", icon: "book" as const, labelEn: "Booklet", labelUr: "رہنما کتاب" },
-  { id: "intake", href: "/intake", icon: "form" as const, labelEn: "Form", labelUr: "مدد فارم" },
-  { id: "privacy", href: "/privacy", icon: "shield" as const, labelEn: "Privacy", labelUr: "رازداری" },
+  { id: "booklet", href: "/booklet", icon: "book" as const, labelEn: "Full booklet", labelUr: "مکمل کتابچہ" },
+  { id: "support", href: "/support", icon: "offices" as const, labelEn: "Official bodies", labelUr: "مددگار سرکاری ادارے" },
+  { id: "contact", href: "/contact", icon: "contact" as const, labelEn: "Contact us", labelUr: "رابطہ کریں" },
 ] as const;

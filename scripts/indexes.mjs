@@ -14,6 +14,8 @@ await Promise.all([
   db.collection("sessions").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
   db.collection("cases").createIndex({ tenantId: 1, caseReference: 1 }, { unique: true }),
   db.collection("cases").createIndex({ tenantId: 1, clientRequestId: 1 }, { unique: true, sparse: true }),
+  db.collection("cases").createIndex({ tenantId: 1, "identity.cnic": 1 }, { unique: true, name: "uniq_tenant_cnic", partialFilterExpression: { "identity.cnic": { $type: "string" } } }),
+  db.collection("cases").createIndex({ tenantId: 1, "identity.passports": 1 }, { unique: true, name: "uniq_tenant_passport", partialFilterExpression: { "identity.passports.0": { $exists: true } } }),
   db.collection("publicIntakeRate").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
   db.collection("loginRate").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
   db.collection("cases").createIndex({ tenantId: 1, status: 1, updatedAt: -1 }),

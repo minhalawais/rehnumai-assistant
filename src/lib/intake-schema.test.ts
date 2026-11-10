@@ -22,6 +22,7 @@ const base = {
   reasonForReturning: "",
   dateOfReturn: "",
   currentStatus: "",
+  helpTopics: [] as string[],
   bankAccountMode: "",
   bankRelation: "",
   bankName: "",

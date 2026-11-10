@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { copy, useLocale } from "@/components/locale";
 import { ManzilMenuFrame } from "@/components/manzil-main-menu";
 import { getManzilMenuSection } from "@/lib/manzil-menu-items";
@@ -15,11 +15,14 @@ export function ManzilSectionMenu({ sectionId }: { sectionId: string }) {
   return (
     <ManzilMenuFrame>
       <div className="manzil-menu__section-page">
-        <Link href="/" className="manzil-menu__back focus-ring">
-          {language === "ur" ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
-          <span className="urdu">{copy(language, "Back", "واپس")}</span>
-        </Link>
-        <h1 className="manzil-menu__section-heading urdu">{copy(language, section.titleEn, section.titleUr)}</h1>
+        <header className={`manzil-index__hero manzil-index__hero--${section.id}`}>
+          <img src={section.icon} alt="" />
+          <Link href="/" className="manzil-menu__back manzil-index__back focus-ring">
+            {language === "ur" ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
+            <span className="urdu">{copy(language, "Back", "واپس")}</span>
+          </Link>
+          <h1 className="manzil-menu__section-heading urdu">{copy(language, section.titleEn, section.titleUr)}</h1>
+        </header>
         <div className="manzil-index">
           {section.groups.map((group) => {
             const groupTitle = copy(language, group.titleEn, group.titleUr);
@@ -37,6 +40,7 @@ export function ManzilSectionMenu({ sectionId }: { sectionId: string }) {
                       <Link href={`/guide/${item.id}`} className="manzil-index__link focus-ring">
                         <span className="manzil-index__bullet" aria-hidden />
                         <span className="manzil-index__title urdu">{copy(language, item.titleEn, item.titleUr)}</span>
+                        {language === "ur" ? <ChevronLeft size={16} className="manzil-index__go" aria-hidden /> : <ChevronRight size={16} className="manzil-index__go" aria-hidden />}
                       </Link>
                     </li>
                   ))}

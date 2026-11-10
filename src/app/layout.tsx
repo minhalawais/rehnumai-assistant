@@ -14,13 +14,14 @@ export const metadata: Metadata = {
   description: siteConfig.defaultDescription,
   icons: {
     icon: [
-      { url: "/brand/rehnumai-mark-16.png", sizes: "16x16", type: "image/png" },
-      { url: "/brand/rehnumai-mark-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/brand/rehnumai-mark-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/brand/manzil-mark-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/brand/manzil-mark-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/manzil-mark-48.png", sizes: "48x48", type: "image/png" },
     ],
     apple: [
-      { url: "/brand/rehnumai-mark-180.png", sizes: "180x180", type: "image/png" },
-      { url: "/brand/rehnumai-app-icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/brand/manzil-mark-180.png", sizes: "180x180", type: "image/png" },
+      { url: "/brand/manzil-app-icon-192.png", sizes: "192x192", type: "image/png" },
     ],
   },
   appleWebApp: {
@@ -36,14 +37,14 @@ export const metadata: Metadata = {
     siteName: siteConfig.applicationName,
     title: siteConfig.defaultTitle,
     description: siteConfig.defaultDescription,
-    images: [{ url: "/brand/rehnumai-lockup.png", width: 1200, height: 630, alt: "Rehnumai" }],
+    images: [{ url: "/brand/manzil-lockup.png", width: 1200, height: 630, alt: siteConfig.applicationName }],
     locale: "ur_PK",
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.defaultTitle,
     description: siteConfig.defaultDescription,
-    images: ["/brand/rehnumai-lockup.png"],
+    images: ["/brand/manzil-lockup.png"],
   },
 };
 

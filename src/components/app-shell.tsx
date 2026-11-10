@@ -29,8 +29,8 @@ export function AppShell({ children, title, subtitle }: { children: React.ReactN
     <header className="app-shell__header sticky top-0 z-20 border-b border-[var(--line)] bg-white/95 backdrop-blur-sm">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <div className="app-shell__bar flex min-h-[52px] items-center justify-between gap-3">
-          <Link href="/portal/submissions" aria-label={copy(language, "Rehnumai submitted forms", "جمع شدہ فارمز — رہنمائی")} className="app-shell__brand flex shrink-0 items-center gap-2 text-[var(--navy-950)]">
-            <BrandMark size={30} /><span className="hidden text-sm font-semibold tracking-tight sm:inline">rehnumai</span>
+          <Link href="/portal/submissions" aria-label={copy(language, "Manzil submitted forms", "جمع شدہ فارمز — منزل")} className="app-shell__brand flex shrink-0 items-center gap-2 text-[var(--navy-950)]">
+            <BrandMark size={30} /><span className="hidden text-sm font-semibold tracking-tight sm:inline">Manzil</span>
           </Link>
           <div className="app-shell__partners-inline">
             <PartnerLogos variant="topbar" />

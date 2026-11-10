@@ -1,11 +1,38 @@
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
+import type { Db } from "mongodb";
 import { getDb } from "@/lib/db";
 import { getEnv } from "@/lib/env";
 import { jsonError, requestId } from "@/lib/api";
 import { requireCsrf } from "@/lib/csrf";
+import { cnicMatchPattern, identityFromAnswers, normalizeCnic, normalizePassport, passportMatchPattern } from "@/lib/intake-identity";
 import { applicableFieldKeys, stripHiddenAnswers, validatePublicAnswersForCategory } from "@/lib/kobo-intake-rules";
 import { publicSubmissionSchema } from "@/lib/public-intake";
+
+let identityIndexesReady = false;
+
+async function ensureIdentityIndexes(db: Db) {
+  if (identityIndexesReady) return;
+  const cases = db.collection("cases");
+  await cases.createIndex(
+    { tenantId: 1, "identity.cnic": 1 },
+    { unique: true, name: "uniq_tenant_cnic", partialFilterExpression: { "identity.cnic": { $type: "string" } } },
+  );
+  await cases.createIndex(
+    { tenantId: 1, "identity.passports": 1 },
+    { unique: true, name: "uniq_tenant_passport", partialFilterExpression: { "identity.passports.0": { $exists: true } } },
+  );
+  identityIndexesReady = true;
+}
+
+function duplicateMessage(language: "ur" | "en", field: "cnic" | "passport") {
+  if (field === "cnic") return language === "ur" ? "یہ شناختی کارڈ نمبر پہلے سے درج ہے۔" : "This CNIC number is already registered.";
+  return language === "ur" ? "یہ پاسپورٹ نمبر پہلے سے درج ہے۔" : "This passport number is already registered.";
+}
+
+function isDuplicateKey(error: unknown): error is { code: number; keyPattern?: Record<string, unknown> } {
+  return typeof error === "object" && error !== null && "code" in error && (error as { code: number }).code === 11000;
+}
 
 export const runtime = "nodejs";
 
@@ -32,6 +59,27 @@ export async function POST(request: Request) {
     const existing = await collection.findOne({ tenantId, clientRequestId }, { projection: { _id: 0, caseReference: 1 } });
     if (existing) return NextResponse.json({ data: { caseReference: existing.caseReference }, meta: { requestId: id } }, { headers: { "Cache-Control": "no-store" } });
 
+    const identity = identityFromAnswers(answers);
+    if (identity.cnic || identity.passports.length) {
+      const clauses: Record<string, unknown>[] = [];
+      if (identity.cnic) clauses.push({ "answers.cnic": { $regex: cnicMatchPattern(identity.cnic) } });
+      for (const passport of identity.passports) {
+        const pattern = { $regex: passportMatchPattern(passport), $options: "i" };
+        clauses.push({ "answers.passportNo": pattern }, { "answers.passportNoAlt": pattern });
+      }
+      const prior = await db.collection("caseRevisions").findOne(
+        { tenantId, $or: clauses },
+        { projection: { "answers.cnic": 1, "answers.passportNo": 1, "answers.passportNoAlt": 1 } },
+      );
+      if (prior) {
+        const priorAnswers = (prior.answers ?? {}) as { cnic?: string; passportNo?: string; passportNoAlt?: string };
+        const sameCnic = Boolean(identity.cnic) && normalizeCnic(String(priorAnswers.cnic ?? "")) === identity.cnic;
+        const field = sameCnic ? "cnic" : "passport";
+        return jsonError(409, "DUPLICATE_IDENTITY", duplicateMessage(answers.language, field), id);
+      }
+    }
+    await ensureIdentityIndexes(db);
+
     // This is an application-level floor. Production deployments also need an edge rate limit.
     const forwardedIp =
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -53,7 +101,17 @@ export async function POST(request: Request) {
     const attentionSignalCodes: string[] = [];
     const storedAnswers = { ...answers, attentionSignalCodes };
     const migrationStage = answers.migrantCategory === "return_migrants" ? "returned" : "exploring";
-    await collection.insertOne({ tenantId, teamId: null, locationId: null, caseId, caseReference, clientRequestId, formKey: "migration-intake", formVersion: "2.0.0", currentRevision: 1, workingRevision: null, status: "submitted", language: answers.language, sourceChannel: "public_intake", applicantSummary: { displayName: answers.fullName }, migrationSummary: { category: answers.migrantCategory, stage: migrationStage, destinationCountry: answers.countryReturnFrom || undefined }, attentionSignalCodes, reviewPriority: "routine", assignedUserId: null, createdBy: null, createdAt: now, updatedAt: now, submittedAt: now, version: 1 });
+    const identityRecord = {
+      ...(identity.cnic ? { cnic: identity.cnic } : {}),
+      ...(identity.passports.length ? { passports: identity.passports } : {}),
+    };
+    try {
+      await collection.insertOne({ tenantId, teamId: null, locationId: null, caseId, caseReference, clientRequestId, formKey: "migration-intake", formVersion: "2.0.0", currentRevision: 1, workingRevision: null, status: "submitted", language: answers.language, sourceChannel: "public_intake", applicantSummary: { displayName: answers.fullName }, migrationSummary: { category: answers.migrantCategory, stage: migrationStage, destinationCountry: answers.countryReturnFrom || undefined }, identity: identityRecord, attentionSignalCodes, reviewPriority: "routine", assignedUserId: null, createdBy: null, createdAt: now, updatedAt: now, submittedAt: now, version: 1 });
+    } catch (error) {
+      if (!isDuplicateKey(error)) throw error;
+      const field = error.keyPattern && "identity.cnic" in error.keyPattern ? "cnic" : "passport";
+      return jsonError(409, "DUPLICATE_IDENTITY", duplicateMessage(answers.language, field), id);
+    }
     await db.collection("caseRevisions").insertOne({ tenantId, caseId, revisionNumber: 1, formVersion: "2.0.0", state: "submitted", answers: storedAnswers, applicableFieldKeys: applicableFieldKeys(answers.migrantCategory), createdBy: null, createdAt: now, version: 1 });
     await db.collection("auditEvents").insertOne({ eventId: crypto.randomUUID(), tenantId, category: "case", action: "public_submit", outcome: "success", actor: { type: "public" }, target: { type: "case", id: caseId, caseReference }, occurredAt: now, requestId: id, metadata: {} });
     return NextResponse.json({ data: { caseReference }, meta: { requestId: id } }, { status: 201, headers: { "Cache-Control": "no-store" } });

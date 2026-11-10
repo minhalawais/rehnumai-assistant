@@ -1,4 +1,5 @@
 export const MANZIL_APP_NAME_EN = "Manzil Pakistan Migrant Worker App";
+export const MANZIL_APP_TAGLINE_EN = "Pakistan Migrant Worker App";
 export const MANZIL_APP_NAME_UR = "منزل — پاکستان مزدور ورکر ایپ";
 
 /** For production: gate intro with localStorage using this key (not used while intro runs every reload). */

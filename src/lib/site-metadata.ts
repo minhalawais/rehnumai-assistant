@@ -1,8 +1,11 @@
+import { MANZIL_APP_NAME_EN } from "@/lib/manzil-intro-copy";
+
 /** Site-wide titles and PWA copy (English; Urdu UI strings stay in locale). */
 export const siteConfig = {
-  applicationName: "Rehnumai",
-  defaultTitle: "Rehnumai | Migration support booklet",
-  titleTemplate: "%s | Rehnumai",
+  applicationName: MANZIL_APP_NAME_EN,
+  shortName: "Manzil",
+  defaultTitle: MANZIL_APP_NAME_EN,
+  titleTemplate: `%s | ${MANZIL_APP_NAME_EN}`,
   defaultDescription:
     "Urdu-first migration readiness booklet, public intake, and staff review workspace for safe and legal migration preparation.",
   themeColor: "#062e43",

@@ -20,9 +20,10 @@ type Props = {
   onSave: (submit?: boolean) => Promise<boolean>;
   onExit: () => void;
   publicMode?: boolean;
+  fillPage?: boolean;
 };
 
-export function MobileIntake({ form, update, language, saveState, error, correctionReason, attested, setAttested, onSave, onExit, publicMode = false }: Props) {
+export function MobileIntake({ form, update, language, saveState, error, correctionReason, attested, setAttested, onSave, onExit, publicMode = false, fillPage = false }: Props) {
   const [index, setIndex] = useState(0);
   const [questionError, setQuestionError] = useState("");
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -33,27 +34,31 @@ export function MobileIntake({ form, update, language, saveState, error, correct
   const question = questions[currentIndex] ?? questions[0];
 
   useEffect(() => {
+    if (fillPage) return;
     if (pendingQuestionId.current === undefined) pendingQuestionId.current = new URLSearchParams(window.location.search).get("question") ?? "";
     const found = questions.findIndex(item => item.id === pendingQuestionId.current);
     if (found >= 0) {
       pendingQuestionId.current = "";
       queueMicrotask(() => setIndex(found));
     }
-  }, [questions]);
+  }, [questions, fillPage]);
 
   useEffect(() => {
-    if (pendingQuestionId.current) return;
     if (!question) return;
-    const url = new URL(window.location.href);
-    url.searchParams.set("question", question.id);
-    window.history.replaceState(null, "", `${url.pathname}${url.search}`);
+    if (!fillPage) {
+      if (pendingQuestionId.current) return;
+      const url = new URL(window.location.href);
+      url.searchParams.set("question", question.id);
+      window.history.replaceState(null, "", `${url.pathname}${url.search}`);
+    }
     titleRef.current?.focus();
-  }, [question]);
+  }, [question, fillPage]);
 
   function move(next: number) {
     setQuestionError("");
     setIndex(Math.max(0, Math.min(next, questions.length - 1)));
-    window.scrollTo({ top: 0, behavior: "instant" });
+    if (fillPage) titleRef.current?.parentElement?.scrollTo({ top: 0 });
+    else window.scrollTo({ top: 0, behavior: "instant" });
   }
 
   function hasAnswer(item: KoboQuestionDef) {
@@ -62,6 +67,7 @@ export function MobileIntake({ form, update, language, saveState, error, correct
       return item.optional || Boolean(String(form[item.key]).trim());
     }
     if (item.kind === "single") return item.optional || Boolean(form[item.key]);
+    if (item.kind === "multi") return item.optional || form.helpTopics.length > 0;
     return true;
   }
 
@@ -98,7 +104,7 @@ export function MobileIntake({ form, update, language, saveState, error, correct
   const progress = Math.round(((currentIndex + 1) / questions.length) * 100);
 
   return (
-    <div className="mobile-intake lg:hidden">
+    <div className={fillPage ? "mobile-intake mobile-intake--page" : "mobile-intake lg:hidden"}>
       <div className="mobile-intake__top">
         <div className="flex items-center justify-between gap-3">
           <span className="text-xs font-bold text-[var(--teal-700)]">{copy(language, section[0], section[1])}</span>
@@ -140,6 +146,24 @@ export function MobileIntake({ form, update, language, saveState, error, correct
             {question.optional && <p className="field-help">{copy(language, "Optional — continue if not known.", "اختیاری — پتہ نہ ہو تو آگے بڑھ سکتے ہیں۔")}</p>}
           </fieldset>
         )}
+        {question.kind === "multi" && question.options && (
+          <fieldset aria-labelledby="mobile-question-title" className="mt-7 space-y-2">
+            <p className="field-help">{copy(language, "Choose one or more.", "ایک سے زیادہ چن سکتے ہیں۔")}</p>
+            {question.options.map(([value, en, ur]) => (
+              <Choice
+                key={value}
+                multiple
+                checked={form.helpTopics.includes(value)}
+                label={copy(language, en, ur)}
+                onChange={() => {
+                  const next = form.helpTopics.includes(value) ? form.helpTopics.filter(item => item !== value) : [...form.helpTopics, value];
+                  update("helpTopics", next);
+                  setQuestionError("");
+                }}
+              />
+            ))}
+          </fieldset>
+        )}
         {question.kind === "review" && (
           <div className="mt-7 space-y-4">
             <IntakeReviewSummary
@@ -169,10 +193,10 @@ export function MobileIntake({ form, update, language, saveState, error, correct
   );
 }
 
-function Choice({ checked, label, onChange, name }: { checked: boolean; label: string; onChange: () => void; name?: string }) {
+function Choice({ checked, label, onChange, name, multiple = false }: { checked: boolean; label: string; onChange: () => void; name?: string; multiple?: boolean }) {
   return (
     <label className={`mobile-choice ${checked ? "mobile-choice--selected" : ""}`}>
-      <input className="mobile-choice__input" type="radio" checked={checked} onChange={onChange} name={name} />
+      <input className={`mobile-choice__input${multiple ? " mobile-choice__input--check" : ""}`} type={multiple ? "checkbox" : "radio"} checked={checked} onChange={onChange} name={name} />
       <span className="mobile-choice__label flex-1">{label}</span>
     </label>
   );

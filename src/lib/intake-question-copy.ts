@@ -78,25 +78,9 @@ export const intakeQuestionCopy = {
     en: "What are you doing now?",
     ur: "ابھی آپ کیا کر رہے ہیں؟",
   },
-  bankAccountMode: {
-    en: "Do you have a bank account in your own name?",
-    ur: "کیا آپ کے اپنے نام پر بینک اکاؤنٹ ہے؟",
-  },
-  bankRelation: {
-    en: "Whose account is it, and how are you related to that person?",
-    ur: "اکاؤنٹ کس کے نام پر ہے، اور آپ کا اس شخص سے کیا رشتہ ہے؟",
-  },
-  bankName: {
-    en: "Which bank is the account with?",
-    ur: "یہ اکاؤنٹ کس بینک میں ہے؟",
-  },
-  accountTitle: {
-    en: "Whose name appears on the bank account?",
-    ur: "بینک اکاؤنٹ پر کس کا نام درج ہے؟",
-  },
-  iban: {
-    en: "What is the account IBAN? (24 digits)",
-    ur: "اس اکاؤنٹ کا آئی بین نمبر کیا ہے؟ (24 ہندسے)",
+  helpTopics: {
+    en: "What kind of information do you need?",
+    ur: "آپ کو کس قسم کی معلومات درکار ہے؟",
   },
   review: {
     en: "Please review your answers before you submit.",

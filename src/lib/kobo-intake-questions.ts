@@ -1,8 +1,7 @@
 import {
-  bankAccountModeOptions,
-  bankRelationOptions,
   currentStatusOptions,
   genderOptions,
+  helpTopicOptions,
   isKoboFieldVisible,
   maritalStatusOptions,
   migrantCategoryOptions,
@@ -20,7 +19,7 @@ export type KoboQuestionDef = {
   section: number;
   en: string;
   ur: string;
-  kind: "text" | "single" | "review";
+  kind: "text" | "single" | "multi" | "review";
   key: KoboQuestionKey;
   optional?: boolean;
   inputMode?: "tel" | "text" | "numeric" | "email";
@@ -53,11 +52,7 @@ export function buildKoboIntakeQuestions(form: IntakeAnswers): KoboQuestionDef[]
     { id: "reason-return", section: 5, ...q(intakeQuestionCopy.reasonForReturning), kind: "single", key: "reasonForReturning", options: reasonForReturningOptions, optional: true },
     { id: "date-return", section: 5, ...q(intakeQuestionCopy.dateOfReturn), kind: "text", key: "dateOfReturn", optional: true, inputType: "date" },
     { id: "current-status", section: 5, ...q(intakeQuestionCopy.currentStatus), kind: "single", key: "currentStatus", options: currentStatusOptions, optional: true },
-    { id: "bank-mode", section: 6, ...q(intakeQuestionCopy.bankAccountMode), kind: "single", key: "bankAccountMode", options: bankAccountModeOptions, optional: true },
-    { id: "bank-relation", section: 6, ...q(intakeQuestionCopy.bankRelation), kind: "single", key: "bankRelation", options: bankRelationOptions, optional: true },
-    { id: "bank-name", section: 6, ...q(intakeQuestionCopy.bankName), kind: "text", key: "bankName", optional: true },
-    { id: "account-title", section: 6, ...q(intakeQuestionCopy.accountTitle), kind: "text", key: "accountTitle", optional: true },
-    { id: "iban", section: 6, ...q(intakeQuestionCopy.iban), kind: "text", key: "iban", optional: true },
+    { id: "help-topics", section: 6, ...q(intakeQuestionCopy.helpTopics), kind: "multi", key: "helpTopics", options: helpTopicOptions },
     { id: "review", section: 7, ...q(intakeQuestionCopy.review), kind: "review", key: "migrantCategory" },
   ];
 

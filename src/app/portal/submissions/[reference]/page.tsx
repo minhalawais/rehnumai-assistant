@@ -16,6 +16,7 @@ import {
   bankRelationOptions,
   currentStatusOptions,
   genderOptions,
+  helpTopicOptions,
   localizedChoice,
   localizedMigrantCategory,
   maritalStatusOptions,
@@ -28,6 +29,12 @@ type Submission = CaseDetail & { answers?: Record<string, unknown> };
 
 function stringValue(value: unknown) {
   return typeof value === "string" && value.trim() ? value : "—";
+}
+
+function helpTopicLabels(value: unknown, language: "ur" | "en") {
+  const keys = Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+  if (!keys.length) return "—";
+  return keys.map(key => localizedChoice(key, helpTopicOptions, language)).join(language === "ur" ? "، " : ", ");
 }
 
 export default function SubmissionPage() {
@@ -94,6 +101,9 @@ export default function SubmissionPage() {
             {showField("reasonForReturning") ? <Info label={copy(language, "Reason for return", "واپسی کی وجہ")} value={localizedChoice(stringValue(answers.reasonForReturning), reasonForReturningOptions, language)} /> : null}
             {showField("dateOfReturn") ? <Info label={copy(language, "Date of return", "واپسی کی تاریخ")} value={stringValue(answers.dateOfReturn)} /> : null}
             {showField("currentStatus") ? <Info label={copy(language, "Current activity", "ابھی کیا کر رہے ہیں؟")} value={localizedChoice(stringValue(answers.currentStatus), currentStatusOptions, language)} /> : null}
+          </Section>
+          <Section title={copy(language, "Information needed", "درکار معلومات")}>
+            <Info label={copy(language, "What kind of information do you need?", "آپ کو کس قسم کی معلومات درکار ہے؟")} value={helpTopicLabels(answers.helpTopics, language)} />
           </Section>
           <Section title={copy(language, "Bank details", "بینک کی معلومات")}>
             <Info label={copy(language, "Bank account", "بینک اکاؤنٹ")} value={localizedChoice(stringValue(answers.bankAccountMode), bankAccountModeOptions, language)} />

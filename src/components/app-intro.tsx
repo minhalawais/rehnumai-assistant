@@ -6,7 +6,7 @@ import { useState } from "react";
 import { copy, useLocale } from "@/components/locale";
 import { PartnerLogos } from "@/components/partner-logos";
 import {
-  MANZIL_APP_NAME_EN,
+  MANZIL_APP_TAGLINE_EN,
   MANZIL_APP_NAME_UR,
   MANZIL_INTRO_HIGHLIGHTS,
   MANZIL_INTRO_PARAGRAPHS_UR,
@@ -125,7 +125,7 @@ function ManzilIntroBrand({ id }: { id?: string }) {
         <p className="app-intro__title-mark" id={id}>
           Manzil
         </p>
-        <p className="app-intro__title-sub">{MANZIL_APP_NAME_EN}</p>
+        <p className="app-intro__title-sub">{MANZIL_APP_TAGLINE_EN}</p>
         {language === "ur" && <p className="app-intro__title-ur">{MANZIL_APP_NAME_UR}</p>}
       </div>
     </div>

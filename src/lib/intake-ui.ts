@@ -9,6 +9,7 @@ export {
   qualificationOptions,
   reasonForReturningOptions,
   currentStatusOptions,
+  helpTopicOptions,
   bankAccountModeOptions,
   bankRelationOptions,
   localizedMigrantCategory,
@@ -36,6 +37,7 @@ export type IntakeAnswers = {
   reasonForReturning: string;
   dateOfReturn: string;
   currentStatus: string;
+  helpTopics: string[];
   bankAccountMode: string;
   bankRelation: string;
   bankName: string;
@@ -63,6 +65,7 @@ export const initialIntake: IntakeAnswers = {
   reasonForReturning: "",
   dateOfReturn: "",
   currentStatus: "",
+  helpTopics: [],
   bankAccountMode: "",
   bankRelation: "",
   bankName: "",
@@ -77,7 +80,7 @@ export const intakeSteps = [
   ["ID documents", "شناختی دستاویزات"],
   ["Education & skill", "تعلیم اور ہنر"],
   ["Abroad / return", "بیرون ملک / واپسی"],
-  ["Bank", "بینک"],
+  ["Help needed", "درکار معلومات"],
   ["Review", "جوابات دیکھیں"],
 ] as const;
 

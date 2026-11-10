@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
-import { MANZIL_APP_NAME_EN } from "@/lib/manzil-intro-copy";
+import { MANZIL_APP_NAME_EN, MANZIL_APP_TAGLINE_EN } from "@/lib/manzil-intro-copy";
 
 const MIN_VISIBLE_MS = 2000;
 const EXIT_MS = 450;
@@ -68,7 +68,7 @@ export function AppSplash({ onComplete }: AppSplashProps) {
         </div>
         <h1 className="app-splash__title" dir="ltr">
           <span className="app-splash__title-brand">Manzil</span>
-          <span className="app-splash__title-rest">{MANZIL_APP_NAME_EN}</span>
+          <span className="app-splash__title-rest">{MANZIL_APP_TAGLINE_EN}</span>
         </h1>
         <div className="app-splash__progress" aria-hidden="true">
           <span className="app-splash__progress-bar" />
