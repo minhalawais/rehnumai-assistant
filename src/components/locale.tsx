@@ -23,8 +23,8 @@ export function useLocale() { return useContext(LocaleContext); }
 
 export function LanguageSwitch() {
   const { language, setLanguage } = useLocale();
-  return <div className="inline-flex rounded-[10px] border border-[var(--line)] bg-white p-1" role="group" aria-label="Language / زبان">
-    <button type="button" onClick={() => setLanguage("ur")} aria-pressed={language === "ur"} className={`min-h-9 rounded-md px-3 text-sm font-semibold ${language === "ur" ? "bg-[var(--navy-900)] text-white" : "text-[var(--ink-700)]"}`}>اردو</button>
+  return <div className="inline-flex rounded-[10px] border border-[var(--line)] bg-white p-1" role="group" aria-label="Language / \u0632\u0628\u0627\u0646">
+    <button type="button" onClick={() => setLanguage("ur")} aria-pressed={language === "ur"} className={`min-h-9 rounded-md px-3 text-sm font-semibold ${language === "ur" ? "bg-[var(--navy-900)] text-white" : "text-[var(--ink-700)]"}`}>{"\u0627\u0631\u062f\u0648"}</button>
     <button type="button" onClick={() => setLanguage("en")} aria-pressed={language === "en"} className={`min-h-9 rounded-md px-3 text-sm font-semibold ${language === "en" ? "bg-[var(--navy-900)] text-white" : "text-[var(--ink-700)]"}`}>EN</button>
   </div>;
 }

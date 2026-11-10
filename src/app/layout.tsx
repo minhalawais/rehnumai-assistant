@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { AppLaunchGate } from "@/components/app-launch-gate";
 import { LocaleProvider } from "@/components/locale";
 import { resolveMetadataBase, siteConfig } from "@/lib/site-metadata";
 
@@ -54,5 +55,18 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="ur" dir="rtl"><body><LocaleProvider><a className="skip-link" href="#main-content">Skip to content / مواد پر جائیں</a>{children}</LocaleProvider></body></html>;
+  return (
+    <html lang="ur" dir="rtl">
+      <body>
+        <LocaleProvider>
+          <AppLaunchGate>
+            <a className="skip-link" href="#main-content">
+              Skip to content / مواد پر جائیں
+            </a>
+            {children}
+          </AppLaunchGate>
+        </LocaleProvider>
+      </body>
+    </html>
+  );
 }

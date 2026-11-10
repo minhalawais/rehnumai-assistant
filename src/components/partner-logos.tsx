@@ -21,13 +21,13 @@ const logos: PartnerLogo[] = [
 type PartnerLogosProps = {
   compact?: boolean;
   /** `topbar` and `login` hide the caption and use tighter layout for headers and sign-in. */
-  variant?: "default" | "topbar" | "login";
+  variant?: "default" | "topbar" | "login" | "intro";
 };
 
 /** Institutional marks used in the booklet and intake service. Keep the marks unmodified. */
 export function PartnerLogos({ compact = false, variant = "default" }: PartnerLogosProps) {
   const { language } = useLocale();
-  const isCompact = compact || variant === "topbar" || variant === "login";
+  const isCompact = compact || variant === "topbar" || variant === "login" || variant === "intro";
   return (
     <div
       className={[
@@ -35,11 +35,16 @@ export function PartnerLogos({ compact = false, variant = "default" }: PartnerLo
         isCompact ? "partner-logos--compact" : "",
         variant === "topbar" ? "partner-logos--topbar" : "",
         variant === "login" ? "partner-logos--login" : "",
+        variant === "intro" ? "partner-logos--intro" : "",
       ].filter(Boolean).join(" ")}
       role="group"
       aria-label={copy(language, "Organizations featured in the Migration Booklet", "مائیگریشن کتابچے میں شامل ادارے")}
     >
-      <span className="partner-logos__label">{copy(language, "Organizations featured in the Migration Booklet", "مائیگریشن کتابچے میں شامل ادارے")}</span>
+      {variant !== "intro" && (
+        <span className="partner-logos__label">
+          {copy(language, "Organizations featured in the Migration Booklet", "مائیگریشن کتابچے میں شامل ادارے")}
+        </span>
+      )}
       <div className="partner-logos__track">
         {logos.map((logo) => (
           <span className="partner-logos__item" key={logo.alt} title={logo.alt}>

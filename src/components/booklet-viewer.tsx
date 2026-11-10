@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Maximize2 } from "lucide-react";
 import { copy, useLocale } from "@/components/locale";
 import { BookletIndexBar, BookletIndexContents, BookletIndexPanel } from "@/components/booklet-index-panel";
@@ -21,17 +21,12 @@ type BookletViewerProps = {
   variant?: "embedded" | "home";
 };
 
-function readDesktopMq(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia(DESKTOP_NAV_MQ).matches;
-}
-
 function useDesktopSideNav(enabled: boolean) {
-  const [active, setActive] = useState(() => enabled && readDesktopMq());
+  const [active, setActive] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!enabled) {
-      queueMicrotask(() => setActive(false));
+      setActive(false);
       return;
     }
     const mq = window.matchMedia(DESKTOP_NAV_MQ);
@@ -45,9 +40,9 @@ function useDesktopSideNav(enabled: boolean) {
 }
 
 function useDesktopNativePdf() {
-  const [native, setNative] = useState(readDesktopMq);
+  const [native, setNative] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const mq = window.matchMedia(DESKTOP_NAV_MQ);
     const sync = () => setNative(mq.matches);
     sync();
@@ -176,6 +171,25 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
       pendingScrollPage.current = null;
     }
   }, [pageHeights]);
+
+  useEffect(() => {
+    const requestedPage = Number(new URLSearchParams(window.location.search).get("page"));
+    if (!Number.isInteger(requestedPage) || requestedPage < 1 || requestedPage > BOOKLET_PAGE_COUNT) return;
+
+    try {
+      sessionStorage.setItem(BOOKLET_INDEX_SESSION_KEY, "1");
+    } catch {
+      /* private mode */
+    }
+    setIndexOpen(false);
+    setActivePage(requestedPage);
+    pendingScrollPage.current = requestedPage;
+    if (useNativePdf) {
+      setNativePdfSrc(bookletNativePdfSrc(requestedPage));
+    } else if (state === "ready") {
+      window.requestAnimationFrame(runPendingScroll);
+    }
+  }, [runPendingScroll, state, useNativePdf]);
 
   useEffect(() => {
     if (useNativePdf || indexOverlay) return;
