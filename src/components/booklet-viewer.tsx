@@ -83,25 +83,29 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
 
   useEffect(() => {
     if (sideNav) return;
-    try {
-      if (sessionStorage.getItem(BOOKLET_INDEX_SESSION_KEY) !== "1") {
+    queueMicrotask(() => {
+      try {
+        if (sessionStorage.getItem(BOOKLET_INDEX_SESSION_KEY) !== "1") {
+          setIndexOpen(true);
+        }
+      } catch {
         setIndexOpen(true);
       }
-    } catch {
-      setIndexOpen(true);
-    }
+    });
   }, [sideNav]);
 
   useEffect(() => {
     if (useNativePdf) {
-      setState("loading");
-      setNativePdfSrc(bookletNativePdfSrc(1));
-      setActivePage(1);
+      queueMicrotask(() => {
+        setState("loading");
+        setNativePdfSrc(bookletNativePdfSrc(1));
+        setActivePage(1);
+      });
       return;
     }
 
     let cancelled = false;
-    setState("loading");
+    queueMicrotask(() => setState("loading"));
     const loadingTask = loadBookletPdfDocument();
     void loadingTask.promise
       .then(doc => {
@@ -145,7 +149,7 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
   useEffect(() => {
     if (useNativePdf || !pdf || width < 1) return;
     let cancelled = false;
-    setPageHeights(null);
+    queueMicrotask(() => setPageHeights(null));
     void measureBookletPageHeights(pdf, width).then(heights => {
       if (!cancelled) setPageHeights(heights);
     });

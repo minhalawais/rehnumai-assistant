@@ -22,6 +22,7 @@
 
 ## 2. Deliberate interpretation decisions
 
+- **2026-11-10 — Kobo-aligned public intake:** Consent screens removed. Migrant category is `potential_migrants` | `return_migrants`. Return block fields (`countryReturnFrom`, `reasonForReturning`, `dateOfReturn`, `currentStatus`) are hidden and stripped on submit for potential migrants only.
 - **2026-11-07 — Public entry model:** The product owner selected public self-submission for the main menu. Visitors can submit an entry without an account and receive a reference; staff review submissions in the protected workspace. This supersedes the original staff-only intake assumption A-01 and the related exclusion in the initial PRD. Privacy, safeguarding, abuse prevention, and public support copy need review for this model before production sign-off.
 - The booklet is guidance material, not an intake instrument. The platform operationalizes only data needed to provide readiness guidance, review, referral, and follow-up.
 - The booklet contains contact and institutional information that may become stale. The app uses a separately verified, versioned referral directory rather than hard-coding booklet contacts.

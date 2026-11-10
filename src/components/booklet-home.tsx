@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { BookletViewer } from "@/components/booklet-viewer";
+import { PublicIntakeReferenceLink } from "@/components/public-intake-reference";
 import { PublicSiteHeader } from "@/components/public-site-header";
 import { copy, useLocale } from "@/components/locale";
 import { BOOKLET_COVER } from "@/lib/booklet";
@@ -30,7 +31,10 @@ export function BookletHome() {
       <footer className="public-page__footer border-t border-[var(--line)] bg-white py-4">
         <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-3 px-5 text-sm text-[var(--ink-700)] sm:px-8">
           <span>© Rehnumai</span>
-          <Link href="/privacy" className="font-semibold text-[var(--navy-900)]">{copy(language, "Privacy", "رازداری")}</Link>
+          <div className="flex flex-wrap items-center gap-4">
+            <PublicIntakeReferenceLink />
+            <Link href="/privacy" className="font-semibold text-[var(--navy-900)]">{copy(language, "Privacy", "رازداری")}</Link>
+          </div>
         </div>
       </footer>
     </div>

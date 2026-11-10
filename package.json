@@ -6,14 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint src",
     "db:ping": "node --env-file=.env.local scripts/ping.mjs",
     "db:indexes": "node --env-file=.env.local scripts/indexes.mjs",
     "db:seed": "node --env-file=.env.local scripts/seed.mjs",
     "postinstall": "node scripts/copy-pdf-worker.mjs",
     "test:booklet-index": "node scripts/verify-booklet-index.mjs",
     "test:booklet-index:e2e": "node scripts/e2e-booklet-index.mjs",
-    "test:booklet-pdf:e2e": "node scripts/e2e-booklet-pdf.mjs"
+    "test:booklet-pdf:e2e": "node scripts/e2e-booklet-pdf.mjs",
+    "test": "vitest run",
+    "test:intake:e2e": "node scripts/e2e-public-intake.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
@@ -34,8 +36,10 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
+    "jsdom": "^29.1.1",
     "playwright": "^1.65.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^2.1.9"
   }
 }

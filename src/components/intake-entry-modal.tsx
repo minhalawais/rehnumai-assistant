@@ -10,18 +10,21 @@ type Phase = "prompt" | "form";
 type Props = {
   open: boolean;
   onClose: () => void;
-  onSubmitted: () => void;
 };
 
-export function IntakeEntryModal({ open, onClose, onSubmitted }: Props) {
+export function IntakeEntryModal({ open, onClose }: Props) {
   const { language } = useLocale();
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>("prompt");
+  const [formProgress, setFormProgress] = useState({ dirty: false, submitted: false });
 
   useEffect(() => {
     if (!open) {
-      queueMicrotask(() => setPhase("prompt"));
+      queueMicrotask(() => {
+        setPhase("prompt");
+        setFormProgress({ dirty: false, submitted: false });
+      });
       return;
     }
     document.body.style.overflow = "hidden";
@@ -33,6 +36,20 @@ export function IntakeEntryModal({ open, onClose, onSubmitted }: Props) {
   }, [open]);
 
   if (!open) return null;
+
+  function confirmCloseForm() {
+    if (formProgress.submitted) {
+      onClose();
+      return;
+    }
+    if (formProgress.dirty) {
+      const leave = window.confirm(
+        copy(language, "Leave the form? Your answers on this device will be lost.", "فارم بند کریں؟ اس آلے پر لکھے جوابات ختم ہو جائیں گے۔"),
+      );
+      if (!leave) return;
+    }
+    onClose();
+  }
 
   function handleBackdrop(event: React.MouseEvent<HTMLDivElement>) {
     if (event.target === event.currentTarget && phase === "prompt") onClose();
@@ -101,16 +118,18 @@ export function IntakeEntryModal({ open, onClose, onSubmitted }: Props) {
                   {copy(language, "Migration form", "مائیگریشن فارم")}
                 </h2>
               </div>
-              <button type="button" className="intake-modal__close btn-quiet" onClick={onClose} aria-label={copy(language, "Close", "بند کریں")}>
-                <X size={18} aria-hidden="true" />
-              </button>
+              {!formProgress.submitted ? (
+                <button type="button" className="intake-modal__close btn-quiet" onClick={confirmCloseForm} aria-label={copy(language, "Close", "بند کریں")}>
+                  <X size={18} aria-hidden="true" />
+                </button>
+              ) : null}
             </header>
             <div className="intake-modal__form-body">
               <PublicIntakeForm
                 surface="modal"
-                onSubmitted={() => onSubmitted()}
-                onDeclined={onClose}
+                onDeclined={confirmCloseForm}
                 onDismiss={onClose}
+                onProgressChange={setFormProgress}
               />
             </div>
           </>

@@ -2,8 +2,6 @@
  * Public intake aligned to Kobo form https://ee.kobotoolbox.org/x/qwfnBGI6
  * — training yes/no removed; category = potential_migrants | return_migrants.
  */
-import type { IntakeAnswers } from "@/lib/intake-ui";
-
 export const KoboSourceUrl = "https://ee.kobotoolbox.org/x/qwfnBGI6";
 
 export const migrantCategoryOptions = [
@@ -75,10 +73,7 @@ export const bankRelationOptions = [
   ["other_relatives", "Other relatives", "رشتہ دار"],
 ] as const;
 
-/** Future: hide fields per category when rules are confirmed. */
-export function isKoboFieldVisible(_fieldKey: keyof IntakeAnswers, _category: MigrantCategory | ""): boolean {
-  return true;
-}
+export { applicableFieldKeys, isKoboFieldVisible, RETURN_BLOCK_KEYS, stripHiddenAnswers, validatePublicAnswersForCategory } from "@/lib/kobo-intake-rules";
 
 export function localizedMigrantCategory(value: string | undefined, language: "ur" | "en"): string {
   const row = migrantCategoryOptions.find(([key]) => key === value);

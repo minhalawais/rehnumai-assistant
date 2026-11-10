@@ -5,8 +5,12 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/app-shell";
+import { StatusBadge } from "@/components/status-badge";
 import { copy, useLocale } from "@/components/locale";
+import { isKoboFieldVisible } from "@/lib/kobo-intake-rules";
+import type { MigrantCategory } from "@/lib/kobo-intake-form";
 import { apiGet, type CaseDetail, shortDate } from "@/lib/client-api";
+import type { IntakeAnswers } from "@/lib/intake-ui";
 import {
   bankAccountModeOptions,
   bankRelationOptions,
@@ -38,6 +42,8 @@ export default function SubmissionPage() {
   }, [params.reference]);
 
   const answers = record?.answers ?? {};
+  const category = (record?.migrationSummary?.category ?? answers.migrantCategory ?? "") as MigrantCategory | "";
+  const showField = (key: keyof IntakeAnswers) => isKoboFieldVisible(key, category);
 
   return (
     <AppShell title={copy(language, "Submitted form", "جمع شدہ فارم")}>
@@ -57,9 +63,12 @@ export default function SubmissionPage() {
           <section className="panel p-5 sm:p-8">
             <p className="font-mono text-xs text-[var(--ink-500)]" dir="ltr">{record.caseReference}</p>
             <h2 className="mt-2 text-[25px] font-semibold text-[var(--navy-950)]">{record.applicantSummary?.displayName || "—"}</h2>
-            <p className="mt-2 text-sm text-[var(--ink-700)]">
-              {copy(language, "Submitted", "جمع کیا")}: <span dir="auto">{shortDate(record.submittedAt, language)}</span>
-            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <StatusBadge value={record.status} />
+              <span className="text-sm text-[var(--ink-700)]">
+                {copy(language, "Submitted", "جمع کیا")}: <span dir="auto">{shortDate(record.submittedAt, language)}</span>
+              </span>
+            </div>
           </section>
           <Section title={copy(language, "Group and contact", "گروپ اور رابطہ")}>
             <Info label={copy(language, "Group", "گروپ")} value={localizedMigrantCategory(stringValue(answers.migrantCategory), language)} />
@@ -81,10 +90,10 @@ export default function SubmissionPage() {
           <Section title={copy(language, "Education and return", "تعلیم اور واپسی")}>
             <Info label={copy(language, "Education", "تعلیم")} value={localizedChoice(stringValue(answers.qualification), qualificationOptions, language)} />
             <Info label={copy(language, "Trade or skill", "پیشہ یا ہنر")} value={stringValue(answers.tradeSkill)} />
-            <Info label={copy(language, "Country returned from", "کس ملک سے واپس آئے؟")} value={stringValue(answers.countryReturnFrom)} />
-            <Info label={copy(language, "Reason for return", "واپسی کی وجہ")} value={localizedChoice(stringValue(answers.reasonForReturning), reasonForReturningOptions, language)} />
-            <Info label={copy(language, "Date of return", "واپسی کی تاریخ")} value={stringValue(answers.dateOfReturn)} />
-            <Info label={copy(language, "Current activity", "ابھی کیا کر رہے ہیں؟")} value={localizedChoice(stringValue(answers.currentStatus), currentStatusOptions, language)} />
+            {showField("countryReturnFrom") ? <Info label={copy(language, "Country returned from", "کس ملک سے واپس آئے؟")} value={stringValue(answers.countryReturnFrom)} /> : null}
+            {showField("reasonForReturning") ? <Info label={copy(language, "Reason for return", "واپسی کی وجہ")} value={localizedChoice(stringValue(answers.reasonForReturning), reasonForReturningOptions, language)} /> : null}
+            {showField("dateOfReturn") ? <Info label={copy(language, "Date of return", "واپسی کی تاریخ")} value={stringValue(answers.dateOfReturn)} /> : null}
+            {showField("currentStatus") ? <Info label={copy(language, "Current activity", "ابھی کیا کر رہے ہیں؟")} value={localizedChoice(stringValue(answers.currentStatus), currentStatusOptions, language)} /> : null}
           </Section>
           <Section title={copy(language, "Bank details", "بینک کی معلومات")}>
             <Info label={copy(language, "Bank account", "بینک اکاؤنٹ")} value={localizedChoice(stringValue(answers.bankAccountMode), bankAccountModeOptions, language)} />

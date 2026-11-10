@@ -25,7 +25,7 @@ type BookletReaderFullscreenProps = {
 function FullscreenNativeSlide({ page, title }: { page: number; title: string }) {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    setReady(false);
+    queueMicrotask(() => setReady(false));
   }, [page]);
   return (
     <div className="booklet-reader-fullscreen__slide-inner">
@@ -65,7 +65,9 @@ export function BookletReaderFullscreen({
     enabled: open,
   });
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    queueMicrotask(() => setMounted(true));
+  }, []);
 
   useEffect(() => {
     if (!open) return;

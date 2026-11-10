@@ -1,9 +1,9 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Copy } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
-import { copy, useLocale } from "@/components/locale";
+import { copy, type Language, useLocale } from "@/components/locale";
 import { apiWrite } from "@/lib/client-api";
 import {
   bankAccountModeOptions,
@@ -12,8 +12,6 @@ import {
   genderOptions,
   initialIntake as initial,
   intakeSteps as stepNames,
-  localizedChoice,
-  localizedMigrantCategory,
   maritalStatusOptions,
   migrantCategoryOptions,
   qualificationOptions,
@@ -21,19 +19,32 @@ import {
   religionOptions,
   type IntakeAnswers as Answers,
 } from "@/lib/intake-ui";
-import { markPublicIntakeSubmitted } from "@/lib/public-intake-storage";
+import { IntakeReviewSummary } from "@/components/intake-review-summary";
+import { RETURN_BLOCK_KEYS, stripHiddenAnswers } from "@/lib/kobo-intake-rules";
+import { intakeQuestionCopy } from "@/lib/intake-question-copy";
+import {
+  getPersistedClientRequestId,
+  markPublicIntakeSubmitted,
+  persistClientRequestId,
+} from "@/lib/public-intake-storage";
 import { MobileIntake } from "@/components/mobile-intake";
+
+function questionLabel(language: Language, key: keyof typeof intakeQuestionCopy) {
+  const q = intakeQuestionCopy[key];
+  return copy(language, q.en, q.ur);
+}
 
 export type PublicIntakeFormProps = {
   surface: "page" | "modal";
   onSubmitted?: (reference: string) => void;
   onDeclined?: () => void;
   onDismiss?: () => void;
+  onProgressChange?: (state: { dirty: boolean; submitted: boolean }) => void;
 };
 
 const LAST_STEP = stepNames.length - 1;
 
-export function PublicIntakeForm({ surface, onSubmitted, onDismiss }: PublicIntakeFormProps) {
+export function PublicIntakeForm({ surface, onSubmitted, onDismiss, onProgressChange }: PublicIntakeFormProps) {
   const { language } = useLocale();
   const [form, setForm] = useState<Answers>(initial);
   const [step, setStep] = useState(0);
@@ -47,16 +58,51 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss }: PublicInta
   const errorRef = useRef<HTMLDivElement>(null);
   const modalOnly = surface === "modal";
 
+  const [copyHint, setCopyHint] = useState("");
+
   useEffect(() => { if (error) errorRef.current?.focus(); }, [error]);
 
+  useEffect(() => {
+    const existing = getPersistedClientRequestId();
+    if (existing) requestKey.current = existing;
+    else if (!requestKey.current) {
+      requestKey.current = crypto.randomUUID();
+      persistClientRequestId(requestKey.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    const dirty = saveState === "dirty" || saveState === "saving" || JSON.stringify(form) !== JSON.stringify(initial);
+    onProgressChange?.({ dirty, submitted: done });
+  }, [form, saveState, done, onProgressChange]);
+
   function update<K extends keyof Answers>(key: K, value: Answers[K]) {
-    setForm(current => ({ ...current, [key]: value }));
+    setForm(current => {
+      const next = { ...current, [key]: value };
+      if (key === "migrantCategory" && value === "potential_migrants") {
+        for (const field of RETURN_BLOCK_KEYS) {
+          next[field] = "";
+        }
+      }
+      return next;
+    });
     setSaveState("dirty");
     setError("");
   }
 
   function payload() {
-    return { ...form, language, primaryPhone: form.primaryPhone.trim() };
+    const answers = stripHiddenAnswers(form);
+    return { ...answers, language, primaryPhone: form.primaryPhone.trim() };
+  }
+
+  async function copyReference() {
+    if (!reference) return;
+    try {
+      await navigator.clipboard.writeText(reference);
+      setCopyHint(copy(language, "Copied", "کاپی ہو گیا"));
+    } catch {
+      setCopyHint(copy(language, "Copy the number above", "اوپر والا نمبر خود محفوظ کریں"));
+    }
   }
 
   async function save(submit = false) {
@@ -69,7 +115,10 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss }: PublicInta
     setSaveState("saving");
     setError("");
     try {
-      if (!requestKey.current) requestKey.current = crypto.randomUUID();
+      if (!requestKey.current) {
+        requestKey.current = crypto.randomUUID();
+        persistClientRequestId(requestKey.current);
+      }
       const result = await apiWrite<{ caseReference: string }>("/api/public/intake", "POST", {
         clientRequestId: requestKey.current,
         confirmed: true,
@@ -81,7 +130,7 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss }: PublicInta
       setSaveState("saved");
       setDone(true);
       markPublicIntakeSubmitted(ref);
-      onSubmitted?.(ref);
+      if (!modalOnly) onSubmitted?.(ref);
       return true;
     } catch (cause) {
       setSaveState("error");
@@ -105,8 +154,21 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss }: PublicInta
       }
     }
     setError("");
-    setStep(current => Math.min(current + 1, LAST_STEP));
+    setStep(current => {
+      let n = Math.min(current + 1, LAST_STEP);
+      if (form.migrantCategory === "potential_migrants" && n === 5) n = 6;
+      return n;
+    });
     if (!modalOnly) window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function prevStep() {
+    setStep(current => {
+      let n = Math.max(current - 1, 0);
+      if (form.migrantCategory === "potential_migrants" && n === 5) n = 4;
+      return n;
+    });
+    setError("");
   }
 
   if (done) {
@@ -119,6 +181,16 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss }: PublicInta
         <p className="mt-2 text-sm text-[var(--ink-700)]">
           {copy(language, "Reference number", "حوالہ نمبر")}: <b dir="ltr">{reference}</b>
         </p>
+        <p className="mt-2 text-sm text-[var(--ink-700)]">
+          {copy(language, "Keep this number for follow-up with the team.", "ٹیم سے رابطے کے لیے یہ نمبر محفوظ رکھیں۔")}
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-secondary" onClick={() => void copyReference()}>
+            <Copy size={16} aria-hidden />
+            {copy(language, "Copy reference", "حوالہ کاپی کریں")}
+          </button>
+          {copyHint ? <span className="text-xs text-[var(--teal-700)]" role="status">{copyHint}</span> : null}
+        </div>
         <div className="mt-6 flex flex-wrap gap-2">
           {modalOnly ? (
             <button type="button" className="btn-primary" onClick={onDismiss}>{copy(language, "Back to booklet", "کتابچہ پر واپس جائیں")}</button>
@@ -151,69 +223,72 @@ export function PublicIntakeForm({ surface, onSubmitted, onDismiss }: PublicInta
           <div className="max-w-[740px]">
             {error && <div ref={errorRef} tabIndex={-1} role="alert" className="mb-5 rounded-[10px] border border-[var(--red-700)] bg-[var(--red-100)] p-3 text-sm text-[var(--red-700)]">{error}</div>}
             {step === 0 && (
-              <RadioField label={copy(language, "Which group are you in?", "آپ کس گروپ میں آتے ہیں؟")} value={form.migrantCategory} onChange={value => update("migrantCategory", value as Answers["migrantCategory"])} options={migrantCategoryOptions} language={language} required />
+              <RadioField label={questionLabel(language, "migrantCategory")} value={form.migrantCategory} onChange={value => update("migrantCategory", value as Answers["migrantCategory"])} options={migrantCategoryOptions} language={language} required />
             )}
             {step === 1 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <TextField label={copy(language, "1. Full name", "1. پورا نام")} value={form.fullName} onChange={value => update("fullName", value)} required />
-                <TextField label={copy(language, "1a. Mobile number", "1a. موبائل نمبر")} value={form.primaryPhone} onChange={value => update("primaryPhone", value)} type="tel" required />
-                <TextField label={copy(language, "1b. Email", "1b. ای میل")} value={form.email} onChange={value => update("email", value)} type="email" />
-                <TextField label={copy(language, "1c. City", "1c. شہر")} value={form.city} onChange={value => update("city", value)} />
-                <TextField label={copy(language, "1d. Home address", "1d. گھر کا پتہ")} value={form.address} onChange={value => update("address", value)} className="sm:col-span-2" />
+                <TextField label={questionLabel(language, "fullName")} value={form.fullName} onChange={value => update("fullName", value)} required />
+                <TextField label={questionLabel(language, "primaryPhone")} value={form.primaryPhone} onChange={value => update("primaryPhone", value)} type="tel" required />
+                <TextField label={questionLabel(language, "email")} value={form.email} onChange={value => update("email", value)} type="email" />
+                <TextField label={questionLabel(language, "city")} value={form.city} onChange={value => update("city", value)} />
+                <TextField label={questionLabel(language, "address")} value={form.address} onChange={value => update("address", value)} className="sm:col-span-2" />
               </div>
             )}
             {step === 2 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <TextField label={copy(language, "2. Father or husband name", "2. والد یا شوہر کا نام")} value={form.fatherHusbandName} onChange={value => update("fatherHusbandName", value)} />
-                <SelectField label={copy(language, "3. Gender", "3. جنس")} value={form.gender} onChange={value => update("gender", value)} options={genderOptions} language={language} />
-                <SelectField label={copy(language, "4. Marital status", "4. شادی شدہ ہیں یا نہیں؟")} value={form.maritalStatus} onChange={value => update("maritalStatus", value)} options={maritalStatusOptions} language={language} />
-                <SelectField label={copy(language, "5. Religion", "5. مذہب")} value={form.religion} onChange={value => update("religion", value)} options={religionOptions} language={language} />
+                <TextField label={questionLabel(language, "fatherHusbandName")} value={form.fatherHusbandName} onChange={value => update("fatherHusbandName", value)} />
+                <SelectField label={questionLabel(language, "gender")} value={form.gender} onChange={value => update("gender", value)} options={genderOptions} language={language} />
+                <SelectField label={questionLabel(language, "maritalStatus")} value={form.maritalStatus} onChange={value => update("maritalStatus", value)} options={maritalStatusOptions} language={language} />
+                <SelectField label={questionLabel(language, "religion")} value={form.religion} onChange={value => update("religion", value)} options={religionOptions} language={language} />
               </div>
             )}
             {step === 3 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <TextField label={copy(language, "6. CNIC number", "6. شناختی کارڈ نمبر")} value={form.cnic} onChange={value => update("cnic", value)} />
-                <TextField label={copy(language, "7. Passport no.", "7. پاسپورٹ نمبر")} value={form.passportNo} onChange={value => update("passportNo", value)} />
-                <TextField label={copy(language, "8. Second passport number (if any)", "8. دوسرا پاسپورٹ نمبر (اگر ہو)")} value={form.passportNoAlt} onChange={value => update("passportNoAlt", value)} />
+                <TextField label={questionLabel(language, "cnic")} value={form.cnic} onChange={value => update("cnic", value)} />
+                <TextField label={questionLabel(language, "passportNo")} value={form.passportNo} onChange={value => update("passportNo", value)} />
+                <TextField label={questionLabel(language, "passportNoAlt")} value={form.passportNoAlt} onChange={value => update("passportNoAlt", value)} />
               </div>
             )}
             {step === 4 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <SelectField label={copy(language, "9. Education", "9. تعلیم")} value={form.qualification} onChange={value => update("qualification", value)} options={qualificationOptions} language={language} />
-                <TextField label={copy(language, "10. Trade or skill", "10. پیشہ یا ہنر")} value={form.tradeSkill} onChange={value => update("tradeSkill", value)} />
+                <SelectField label={questionLabel(language, "qualification")} value={form.qualification} onChange={value => update("qualification", value)} options={qualificationOptions} language={language} />
+                <TextField label={questionLabel(language, "tradeSkill")} value={form.tradeSkill} onChange={value => update("tradeSkill", value)} />
               </div>
             )}
             {step === 5 && (
-              <div className="grid gap-5 sm:grid-cols-2">
-                <TextField label={copy(language, "11. Country you returned from", "11. کس ملک سے واپس آئے؟")} value={form.countryReturnFrom} onChange={value => update("countryReturnFrom", value)} />
-                <SelectField label={copy(language, "12. Reason for return", "12. واپسی کی وجہ")} value={form.reasonForReturning} onChange={value => update("reasonForReturning", value)} options={reasonForReturningOptions} language={language} />
-                <TextField label={copy(language, "13. Date of return", "13. واپسی کی تاریخ")} value={form.dateOfReturn} onChange={value => update("dateOfReturn", value)} type="date" />
-                <SelectField label={copy(language, "14. What are you doing now?", "14. ابھی آپ کیا کر رہے ہیں؟")} value={form.currentStatus} onChange={value => update("currentStatus", value)} options={currentStatusOptions} language={language} />
-              </div>
+              form.migrantCategory === "potential_migrants" ? (
+                <p className="text-sm text-[var(--ink-700)]">
+                  {copy(language, "This section applies to people who have returned from abroad. You can continue to the next step.", "یہ حصہ اُن لوگوں کے لیے ہے جو بیرون ملک سے واپس آئے ہیں۔ آپ اگلے مرحلے پر جا سکتے ہیں۔")}
+                </p>
+              ) : (
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <TextField label={questionLabel(language, "countryReturnFrom")} value={form.countryReturnFrom} onChange={value => update("countryReturnFrom", value)} />
+                  <SelectField label={questionLabel(language, "reasonForReturning")} value={form.reasonForReturning} onChange={value => update("reasonForReturning", value)} options={reasonForReturningOptions} language={language} />
+                  <TextField label={questionLabel(language, "dateOfReturn")} value={form.dateOfReturn} onChange={value => update("dateOfReturn", value)} type="date" />
+                  <SelectField label={questionLabel(language, "currentStatus")} value={form.currentStatus} onChange={value => update("currentStatus", value)} options={currentStatusOptions} language={language} />
+                </div>
+              )
             )}
             {step === 6 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <SelectField label={copy(language, "Do you have your own bank account?", "کیا آپ کا اپنا بینک اکاؤنٹ ہے؟")} value={form.bankAccountMode} onChange={value => update("bankAccountMode", value)} options={bankAccountModeOptions} language={language} />
-                <SelectField label={copy(language, "Relation to account holder", "اکاؤنٹ کس کا ہے — آپ کا ان سے کیا رشتہ ہے؟")} value={form.bankRelation} onChange={value => update("bankRelation", value)} options={bankRelationOptions} language={language} />
-                <TextField label={copy(language, "Bank name", "بینک کا نام")} value={form.bankName} onChange={value => update("bankName", value)} />
-                <TextField label={copy(language, "Name on account", "اکاؤنٹ پر لکھا نام")} value={form.accountTitle} onChange={value => update("accountTitle", value)} />
-                <TextField label={copy(language, "IBAN (24 digits)", "آئی بین نمبر (24 ہندسے)")} value={form.iban} onChange={value => update("iban", value)} className="sm:col-span-2" />
+                <SelectField label={questionLabel(language, "bankAccountMode")} value={form.bankAccountMode} onChange={value => update("bankAccountMode", value)} options={bankAccountModeOptions} language={language} />
+                <SelectField label={questionLabel(language, "bankRelation")} value={form.bankRelation} onChange={value => update("bankRelation", value)} options={bankRelationOptions} language={language} />
+                <TextField label={questionLabel(language, "bankName")} value={form.bankName} onChange={value => update("bankName", value)} />
+                <TextField label={questionLabel(language, "accountTitle")} value={form.accountTitle} onChange={value => update("accountTitle", value)} />
+                <TextField label={questionLabel(language, "iban")} value={form.iban} onChange={value => update("iban", value)} className="sm:col-span-2" />
               </div>
             )}
             {step === 7 && (
               <div className="space-y-5">
-                <p className="text-sm text-[var(--ink-700)]">{copy(language, "Check your answers before submitting.", "جمع کرنے سے پہلے جوابات ایک بار پڑھ لیں۔")}</p>
-                <ReviewGroup title={copy(language, "Your group", "آپ کا گروپ")} onEdit={() => setStep(0)} editLabel={copy(language, "Edit", "بدلیں")} rows={[[copy(language, "Group", "گروپ"), localizedMigrantCategory(form.migrantCategory, language)]]} />
-                <ReviewGroup title={copy(language, "Contact", "رابطہ")} onEdit={() => setStep(1)} editLabel={copy(language, "Edit", "بدلیں")} rows={[[copy(language, "Name", "نام"), form.fullName], [copy(language, "Mobile", "موبائل"), form.primaryPhone], [copy(language, "Email", "ای میل"), form.email || "—"]]} />
-                <ReviewGroup title={copy(language, "Personal", "ذاتی معلومات")} onEdit={() => setStep(2)} editLabel={copy(language, "Edit", "بدلیں")} rows={[[copy(language, "Gender", "جنس"), localizedChoice(form.gender, genderOptions, language)], [copy(language, "CNIC", "شناختی کارڈ"), form.cnic || "—"]]} />
-                <ReviewGroup title={copy(language, "Abroad / return", "بیرون ملک / واپسی")} onEdit={() => setStep(5)} editLabel={copy(language, "Edit", "بدلیں")} rows={[[copy(language, "Country", "ملک"), form.countryReturnFrom || "—"], [copy(language, "Reason", "وجہ"), localizedChoice(form.reasonForReturning, reasonForReturningOptions, language)]]} />
+                <p className="text-sm text-[var(--ink-700)]">{questionLabel(language, "review")}</p>
+                <IntakeReviewSummary form={form} language={language} variant="desktop" onEditStep={setStep} />
                 <CheckField checked={attested} onChange={setAttested} label={copy(language, "I have checked my answers and understand they will be reviewed by staff.", "میرے لکھے ہوئے جوابات درست ہیں اور میں جانتا/جانتی ہوں کہ ٹیم انہیں دیکھے گی۔")} />
               </div>
             )}
           </div>
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-5">
             <div className="flex gap-2">
-              <button type="button" className="btn-quiet" disabled={step === 0} onClick={() => { setStep(current => current - 1); setError(""); }}>
+              <button type="button" className="btn-quiet" disabled={step === 0} onClick={prevStep}>
                 <ArrowLeft size={16} className="rtl:rotate-180" />
                 {copy(language, "Back", "پیچھے")}
               </button>
@@ -286,21 +361,3 @@ function RadioField({ label, value, onChange, options, language, required }: { l
   );
 }
 
-function ReviewGroup({ title, rows, onEdit, editLabel }: { title: string; rows: string[][]; onEdit: () => void; editLabel: string }) {
-  return (
-    <section className="rounded-[10px] border border-[var(--line)]">
-      <div className="flex items-center justify-between border-b border-[var(--line)] px-3 py-2 sm:px-4">
-        <h3 className="text-sm font-semibold">{title}</h3>
-        <button type="button" className="text-xs font-semibold text-[var(--teal-700)] underline" onClick={onEdit}>{editLabel}</button>
-      </div>
-      <dl className="divide-y divide-[var(--line)]">
-        {rows.map(([key, value]) => (
-          <div key={key} className="grid gap-1 px-3 py-2 sm:grid-cols-[160px_1fr] sm:px-4 sm:py-3">
-            <dt className="text-xs text-[var(--ink-700)] sm:text-sm">{key}</dt>
-            <dd className="text-sm font-medium">{value}</dd>
-          </div>
-        ))}
-      </dl>
-    </section>
-  );
-}

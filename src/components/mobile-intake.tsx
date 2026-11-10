@@ -3,8 +3,9 @@
 import { ArrowLeft, ArrowRight, Check, Save } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { copy, type Language } from "@/components/locale";
+import { IntakeReviewSummary } from "@/components/intake-review-summary";
 import { buildKoboIntakeQuestions, type KoboQuestionDef } from "@/lib/kobo-intake-questions";
-import { intakeSteps, localizedChoice, localizedMigrantCategory, type IntakeAnswers } from "@/lib/intake-ui";
+import { intakeSteps, type IntakeAnswers } from "@/lib/intake-ui";
 
 type Props = {
   form: IntakeAnswers;
@@ -47,7 +48,7 @@ export function MobileIntake({ form, update, language, saveState, error, correct
     url.searchParams.set("question", question.id);
     window.history.replaceState(null, "", `${url.pathname}${url.search}`);
     titleRef.current?.focus();
-  }, [question?.id]);
+  }, [question]);
 
   function move(next: number) {
     setQuestionError("");
@@ -101,7 +102,7 @@ export function MobileIntake({ form, update, language, saveState, error, correct
       <div className="mobile-intake__top">
         <div className="flex items-center justify-between gap-3">
           <span className="text-xs font-bold text-[var(--teal-700)]">{copy(language, section[0], section[1])}</span>
-          <span className="text-xs font-semibold text-[var(--ink-700)]" aria-live="polite">
+          <span className="text-xs font-semibold text-[var(--ink-700)]" dir="ltr" aria-live="polite">
             {currentIndex + 1} / {questions.length}
           </span>
         </div>
@@ -141,9 +142,15 @@ export function MobileIntake({ form, update, language, saveState, error, correct
         )}
         {question.kind === "review" && (
           <div className="mt-7 space-y-4">
-            <ReviewBlock title={copy(language, "Your group", "آپ کا گروپ")} value={localizedMigrantCategory(form.migrantCategory, language)} onEdit={() => move(questions.findIndex(item => item.id === "migrant-category"))} language={language} />
-            <ReviewBlock title={copy(language, "Name", "نام")} value={form.fullName || "—"} onEdit={() => move(questions.findIndex(item => item.id === "full-name"))} language={language} />
-            <ReviewBlock title={copy(language, "Contact", "رابطہ")} value={form.primaryPhone || "—"} onEdit={() => move(questions.findIndex(item => item.id === "phone"))} language={language} />
+            <IntakeReviewSummary
+              form={form}
+              language={language}
+              variant="mobile"
+              onEditQuestionId={id => {
+                const found = questions.findIndex(item => item.id === id);
+                if (found >= 0) move(found);
+              }}
+            />
             <label className="mt-6 flex min-h-14 items-start gap-3 rounded-[12px] border border-[var(--line)] p-4 text-sm leading-7">
               <input type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-[var(--teal-700)]" checked={attested} onChange={event => setAttested(event.target.checked)} />
               <span>{copy(language, "I have checked my answers and understand they will be reviewed by staff.", "میرے لکھے ہوئے جوابات درست ہیں اور میں جانتا/جانتی ہوں کہ ٹیم انہیں دیکھے گی۔")}</span>
@@ -163,17 +170,11 @@ export function MobileIntake({ form, update, language, saveState, error, correct
 }
 
 function Choice({ checked, label, onChange, name }: { checked: boolean; label: string; onChange: () => void; name?: string }) {
-  return <label className={`mobile-choice ${checked ? "mobile-choice--selected" : ""}`}><span className="flex-1">{label}</span><input className="mobile-choice__input" type="radio" checked={checked} onChange={onChange} name={name} /></label>;
-}
-
-function ReviewBlock({ title, value, onEdit, language }: { title: string; value: string; onEdit: () => void; language: Language }) {
   return (
-    <div className="rounded-[12px] border border-[var(--line)] bg-white p-4">
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-xs font-semibold text-[var(--ink-700)]">{title}</span>
-        <button type="button" className="min-h-11 text-xs font-semibold text-[var(--teal-700)]" onClick={onEdit}>{copy(language, "Edit", "بدلیں")}</button>
-      </div>
-      <p className="mt-1 text-sm font-semibold text-[var(--ink-950)]">{value}</p>
-    </div>
+    <label className={`mobile-choice ${checked ? "mobile-choice--selected" : ""}`}>
+      <input className="mobile-choice__input" type="radio" checked={checked} onChange={onChange} name={name} />
+      <span className="mobile-choice__label flex-1">{label}</span>
+    </label>
   );
 }
+

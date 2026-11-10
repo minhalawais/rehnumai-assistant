@@ -1,15 +1,4 @@
-import {
-  bankAccountModeOptions,
-  bankRelationOptions,
-  currentStatusOptions,
-  genderOptions,
-  maritalStatusOptions,
-  migrantCategoryOptions,
-  qualificationOptions,
-  reasonForReturningOptions,
-  religionOptions,
-  type MigrantCategory,
-} from "@/lib/kobo-intake-form";
+import type { MigrantCategory } from "@/lib/kobo-intake-form";
 
 export type { MigrantCategory };
 export {

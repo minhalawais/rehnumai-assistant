@@ -10,20 +10,17 @@ export default function HomePage() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const submitted = hasPublicIntakeSubmitted();
-    setModalOpen(!submitted);
-    setReady(true);
+    queueMicrotask(() => {
+      setModalOpen(!hasPublicIntakeSubmitted());
+      setReady(true);
+    });
   }, []);
 
   return (
     <>
       <BookletHome />
       {ready && modalOpen && (
-        <IntakeEntryModal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          onSubmitted={() => setModalOpen(false)}
-        />
+        <IntakeEntryModal open={modalOpen} onClose={() => setModalOpen(false)} />
       )}
     </>
   );

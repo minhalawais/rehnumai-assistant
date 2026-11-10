@@ -8,8 +8,8 @@ Rehnumai is an Urdu-first, English-supported migration readiness and case-review
 - `/login` - bilingual staff sign-in with visible errors.
 - `/portal` - redirects authenticated staff to the submissions page.
 - `/portal/submissions` - staff landing page with submission count, search, stage filter, and pagination.
-- `/portal/submissions/[reference]` - scoped case detail, protected-field handling, case actions, and activity.
-- `/intake` - one-question-at-a-time mobile intake and the existing six-step desktop form, with server-backed drafts, correction revisions, review, and submission receipt.
+- `/portal/submissions/[reference]` - read-only scoped case detail (status badge, grouped answers). Staff workflow transitions are not implemented yet.
+- `/intake` - one-question-at-a-time mobile intake and an eight-step desktop wizard; public submit with receipt and reference (no server-backed draft or correction loop yet).
 - `/booklet` - redirects to `/`.
 - `/api/health` - safe deployment health response.
 - `/api/auth/csrf` - double-submit CSRF token issuance.
@@ -101,7 +101,7 @@ The seed account is `demo@rehnumai.local` with password `ChangeMe-For-Local-Only
 - Secure, HTTP-only, SameSite cookies in production.
 - Double-submit CSRF token and same-origin verification on state-changing routes.
 - Server-side Zod validation and session authorization at service/API boundaries.
-- In-memory login throttling is included as a local baseline. Replace it with a shared Redis/edge limiter before multi-instance production deployment.
+- Login throttling uses MongoDB (`loginRate` collection) with TTL indexes; apply `npm run db:indexes` after deploy. Add an edge rate limiter for multi-region production.
 - Redacted structured errors and audit event inserts for authentication/case creation.
 - Security headers in `next.config.ts`.
 
@@ -128,10 +128,21 @@ Before your first production deploy, follow **[DEPLOY.md](./DEPLOY.md)** (env va
 
 MongoDB Atlas **Network Access** must allow Vercel (often `0.0.0.0/0` for serverless egress, or Vercel's integration IP list if you restrict).
 
+## Tests
+
+```bash
+npm test
+npm run test:intake:e2e    # Playwright; requires `npm run dev` and MongoDB for submit
+npm run test:booklet-pdf:e2e
+```
+
+Clearing browser storage allows another public submission on the same device. Reference numbers are stored locally as `rehnumai_public_intake_submitted_ref`.
+
 ## Build and deploy
 
 ```bash
 npm run lint
+npm test
 npm run build
 npm run start
 ```
