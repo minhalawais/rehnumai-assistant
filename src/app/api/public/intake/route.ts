@@ -40,10 +40,11 @@ export async function POST(request: Request) {
     const now = new Date();
     const caseId = crypto.randomUUID();
     const caseReference = `MIG-${String(now.getFullYear()).slice(-2)}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
-    const attentionSignalCodes = Object.entries(answers.safetyAnswers).filter(([key, value]) => /^AT-\d{3}$/.test(key) && value === "yes").map(([key]) => key);
+    const attentionSignalCodes: string[] = [];
     const storedAnswers = { ...answers, attentionSignalCodes };
-    await collection.insertOne({ tenantId, teamId: null, locationId: null, caseId, caseReference, clientRequestId, formKey: "migration-intake", formVersion: "1.0.0", currentRevision: 1, workingRevision: null, status: "submitted", language: answers.language, sourceChannel: "public_intake", applicantSummary: { displayName: answers.fullName }, migrationSummary: { stage: answers.migrationStage, purpose: answers.migrationPurpose, destinationCountry: answers.destinationCountry }, attentionSignalCodes, reviewPriority: attentionSignalCodes.length ? "priority" : "routine", assignedUserId: null, createdBy: null, createdAt: now, updatedAt: now, submittedAt: now, version: 1 });
-    await db.collection("caseRevisions").insertOne({ tenantId, caseId, revisionNumber: 1, formVersion: "1.0.0", state: "submitted", answers: storedAnswers, applicableFieldKeys: Object.keys(storedAnswers), createdBy: null, createdAt: now, version: 1 });
+    const migrationStage = answers.migrantCategory === "return_migrants" ? "returned" : "exploring";
+    await collection.insertOne({ tenantId, teamId: null, locationId: null, caseId, caseReference, clientRequestId, formKey: "migration-intake", formVersion: "2.0.0", currentRevision: 1, workingRevision: null, status: "submitted", language: answers.language, sourceChannel: "public_intake", applicantSummary: { displayName: answers.fullName }, migrationSummary: { category: answers.migrantCategory, stage: migrationStage, destinationCountry: answers.countryReturnFrom || undefined }, attentionSignalCodes, reviewPriority: "routine", assignedUserId: null, createdBy: null, createdAt: now, updatedAt: now, submittedAt: now, version: 1 });
+    await db.collection("caseRevisions").insertOne({ tenantId, caseId, revisionNumber: 1, formVersion: "2.0.0", state: "submitted", answers: storedAnswers, applicableFieldKeys: Object.keys(storedAnswers), createdBy: null, createdAt: now, version: 1 });
     await db.collection("auditEvents").insertOne({ eventId: crypto.randomUUID(), tenantId, category: "case", action: "public_submit", outcome: "success", actor: { type: "public" }, target: { type: "case", id: caseId, caseReference }, occurredAt: now, requestId: id, metadata: {} });
     return NextResponse.json({ data: { caseReference }, meta: { requestId: id } }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (error) {

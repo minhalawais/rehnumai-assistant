@@ -32,9 +32,9 @@ export function PublicSiteHeader({ showStaffSignIn = true, trailing, maxWidth = 
             {trailing}
             <LanguageSwitch />
             {showStaffSignIn && (
-              <Link href="/login" className="btn-secondary public-site-header__staff gap-1.5">
+              <Link href="/login" className="btn-secondary public-site-header__staff gap-1.5" aria-label={copy(language, "Staff login", "عملے کے لیے لاگ اِن")}>
                 <LockKeyhole size={16} aria-hidden="true" />
-                <span className="hidden sm:inline">{copy(language, "Staff sign in", "عملے کا لاگ اِن")}</span>
+                <span className="hidden sm:inline">{copy(language, "Login", "Login")}</span>
               </Link>
             )}
           </div>

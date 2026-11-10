@@ -29,7 +29,7 @@ export function AppShell({ children, title, subtitle }: { children: React.ReactN
     <header className="app-shell__header sticky top-0 z-20 border-b border-[var(--line)] bg-white/95 backdrop-blur-sm">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <div className="app-shell__bar flex min-h-[52px] items-center justify-between gap-3">
-          <Link href="/portal/submissions" aria-label={copy(language, "Rehnumai submitted forms", "رہنمائی کے جمع شدہ فارم")} className="app-shell__brand flex shrink-0 items-center gap-2 text-[var(--navy-950)]">
+          <Link href="/portal/submissions" aria-label={copy(language, "Rehnumai submitted forms", "جمع شدہ فارمز — رہنمائی")} className="app-shell__brand flex shrink-0 items-center gap-2 text-[var(--navy-950)]">
             <BrandMark size={30} /><span className="hidden text-sm font-semibold tracking-tight sm:inline">rehnumai</span>
           </Link>
           <div className="app-shell__partners-inline">
@@ -37,8 +37,8 @@ export function AppShell({ children, title, subtitle }: { children: React.ReactN
           </div>
           <div className="app-shell__actions flex items-center gap-2 sm:gap-2.5">
             <LanguageSwitch />
-            <button type="button" onClick={signOut} disabled={signingOut} aria-label={copy(language, signingOut ? "Signing out" : "Sign out", signingOut ? "سائن آؤٹ ہو رہا ہے" : "سائن آؤٹ")} className="app-shell__sign-out btn-quiet min-h-10 gap-2 px-2 text-sm sm:px-2.5">
-              <LogOut size={16} aria-hidden="true" /><span className="hidden sm:inline">{copy(language, signingOut ? "Signing out…" : "Sign out", signingOut ? "سائن آؤٹ ہو رہا ہے…" : "سائن آؤٹ")}</span>
+            <button type="button" onClick={signOut} disabled={signingOut} aria-label={copy(language, signingOut ? "Signing out" : "Sign out", signingOut ? "باہر نکل رہے ہیں" : "باہر نکلیں")} className="app-shell__sign-out btn-quiet min-h-10 gap-2 px-2 text-sm sm:px-2.5">
+              <LogOut size={16} aria-hidden="true" /><span className="hidden sm:inline">{copy(language, signingOut ? "Signing out…" : "Sign out", signingOut ? "باہر نکل رہے ہیں…" : "باہر نکلیں")}</span>
             </button>
           </div>
         </div>

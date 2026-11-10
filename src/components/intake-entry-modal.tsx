@@ -69,26 +69,26 @@ export function IntakeEntryModal({ open, onClose, onSubmitted }: Props) {
               <div className="intake-modal__prompt-lead">
                 <div className="intake-modal__prompt-icon" aria-hidden="true"><ClipboardList size={20} /></div>
                 <div className="min-w-0">
-                  <p className="intake-modal__eyebrow">{copy(language, "Rehnumai intake", "رہنمائی کا اندراج")}</p>
+                  <p className="intake-modal__eyebrow">{copy(language, "Migration form", "مائیگریشن فارم")}</p>
                   <h2 id={titleId} className="intake-modal__title">
-                    {copy(language, "Share your preparation needs", "اپنی تیاری کی ضروریات بتائیں")}
+                    {copy(language, "Enter your details", "اپنی معلومات درج کریں")}
                   </h2>
                 </div>
               </div>
               <p className="intake-modal__copy">
                 {copy(
                   language,
-                  "A short form for the team to review your documents and support needs. You receive a reference number after submit. No job, visa, or approval is guaranteed.",
-                  "ٹیم آپ کی دستاویزات اور مدد کے لیے مختصر فارم۔ جمع کرانے پر حوالہ نمبر ملے گا۔ ملازمت، ویزا یا منظوری کی ضمانت نہیں۔",
+                  "This short form collects basic details so the team can guide you. After you submit, you get a reference number.",
+                  "یہ مختصر فارم آپ کی بنیادی معلومات لیتا ہے تاکہ ٹیم آپ کی رہنمائی کر سکے۔ فارم جمع کرنے کے بعد آپ کو ایک حوالہ نمبر ملے گا۔",
                 )}
               </p>
             </div>
             <div className="intake-modal__sheet-actions">
               <button type="button" className="btn-primary intake-modal__cta" onClick={() => setPhase("form")}>
-                {copy(language, "Start the form", "فارم شروع کریں")}
+                {copy(language, "Start the form", "فارم بھریں")}
               </button>
               <button type="button" className="intake-modal__dismiss" onClick={onClose}>
-                {copy(language, "Continue reading the booklet", "کتابچہ پڑھنا جاری رکھیں")}
+                {copy(language, "Read the booklet", "کتابچہ پڑھیں")}
               </button>
             </div>
           </>
@@ -96,9 +96,9 @@ export function IntakeEntryModal({ open, onClose, onSubmitted }: Props) {
           <>
             <header className="intake-modal__form-head">
               <div className="min-w-0 flex-1">
-                <p className="intake-modal__eyebrow">{copy(language, "Step by step", "مرحلہ وار فارم")}</p>
+                <p className="intake-modal__eyebrow">{copy(language, "Step by step", "قدم بہ قدم")}</p>
                 <h2 id={titleId} className="intake-modal__title intake-modal__title--sm">
-                  {copy(language, "Rehnumai form", "رہنمائی کا فارم")}
+                  {copy(language, "Migration form", "مائیگریشن فارم")}
                 </h2>
               </div>
               <button type="button" className="intake-modal__close btn-quiet" onClick={onClose} aria-label={copy(language, "Close", "بند کریں")}>

@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><title>Enketo Express for KoboToolbox</title><meta charset="utf-8"><meta name="author" content="Martijn van de Rijdt (Enketo LLC)"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="shortcut icon" href="/x/images/favicon.ico"><link rel="icon" type="image/png" sizes="180x180" href="/x/images/icon_180x180.png"><link rel="apple-touch-icon" sizes="180x180" href="/x/images/icon_180x180.png"><script>if (navigator.userAgent.indexOf('Trident/') >= 0) {
+    window.location.href = '/modern-browsers';
+}
+</script><!-- preload for performance--><link rel="preload" as="font" href="/x/fonts/OpenSans-Bold-webfont.woff" type="font/woff" crossorigin><link rel="preload" as="font" href="/x/fonts/OpenSans-Regular-webfont.woff" type="font/woff" crossorigin><link rel="preload" as="font" href="/x/fonts/fontawesome-webfont.woff?v=4.6.2" type="font/woff" crossorigin><!-- critical styles inline for performance--><style>@keyframes pulsate {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+html {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  margin: 0;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 1.3s ease;
+}
+
+progress {
+  display: block;
+  margin: 10px auto;
+}
+
+.preview progress {
+  margin: 80px auto;
+}
+
+.main-loader {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main-loader.fail .main-loader__image {
+  border: transparent;
+  animation: none;
+}
+
+.main-loader__image {
+  border: 10px solid #ccc;
+  transition: border-color 1.3s ease;
+  border-radius: 100px;
+  height: 100px;
+  width: 100px;
+  opacity: 0;
+  animation: pulsate 2s ease-out;
+  animation-iteration-count: infinite;
+}
+
+.main-loader ~ .main,
+.main-loader ~ .side-slider {
+  display: none;
+}
+
+.loader-animation-small {
+  border: 5px solid #ccc;
+  transition: border-color 1.3s ease;
+  border-radius: 50px;
+  height: 50px;
+  width: 50px;
+  opacity: 0;
+  animation: pulsate 2s ease-out;
+  animation-iteration-count: infinite;
+}
+
+.page-break {
+  display: none;
+}
+
+.log {
+  word-break: break-all;
+}
+
+.vex.vex-theme-plain.full-screen {
+  padding: 0;
+}
+.vex.vex-theme-plain.full-screen .vex-content {
+  width: 100vw;
+  width: 100dvw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  border: none;
+  border-radius: 0;
+}
+.vex.vex-theme-plain.full-screen .vex-dialog-message {
+  border: 7px solid #ddd;
+  border-radius: 7px;
+  padding: 1em 3em;
+  margin: 1em 3em;
+}
+.vex.vex-theme-plain.full-screen .vex-dialog-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}</style><link rel="stylesheet" media="all" type="text/css" href="/x/css/theme-kobo.css"><link rel="stylesheet" media="print" type="text/css" href="/x/css/theme-kobo.print.css"></head><body><div class="main-loader"><div class="main-loader__image"></div></div><div class="main"><article class="paper"><header class="form-header"><div class="offline-enabled"><div class="offline-enabled__icon not-enabled" title="This form is able to launch offline"></div><div class="offline-enabled__queue-length" title="Records Queued"></div></div><div class="form-progress"></div><div class="form-header__branding"><div class="logo-wrapper"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJhIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjQzLjYyNCIgaGVpZ2h0PSI2MS44MDYiIHZpZXdCb3g9IjAgMCA0MzQuNDEgNTYuODUiPjxkZWZzPjxzdHlsZT4uYntmaWxsOiMyMDk1ZjM7fS5je2ZpbGw6IzU2NWU3Njt9PC9zdHlsZT48L2RlZnM+PHBhdGggY2xhc3M9ImMiIGQ9Ik0xMTIuODQsMTMuNzNjLTEwLjgsMC0xOS4yLDguNy0xOS4yLDE5LjJzOC43LDE5LjIsMTkuMiwxOS4yLDE5LjItOC43LDE5LjItMTkuMmMuMy0xMC44LTguNC0xOS4yLTE5LjItMTkuMlptMCwzMC45Yy02LjMsMC0xMS40LTUuMS0xMS40LTExLjRzNS4xLTExLjQsMTEuNC0xMS40LDExLjQsNS4xLDExLjQsMTEuNGMuMyw2LTUuMSwxMS40LTExLjQsMTEuNFoiLz48cGF0aCBjbGFzcz0iYyIgZD0iTTE1Ny44NCwxMy43M2MtNS40LS45LTEwLjUsLjYtMTQuNCwzLjZWNy40M2MwLTMtMi40LTUuMS01LjEtNS4xaDBjLTEuNSwwLTIuNCwxLjItMi40LDIuNFY0Ni43M2MwLDMsMi40LDUuMSw1LjEsNS4xaDBjMS41LDAsMi40LTEuMiwyLjQtMi40di0uOWMzLjMsMi40LDcuMiwzLjksMTEuNCwzLjksMTEuNCwwLDIwLjQtOS45LDE5LjItMjEuNi0uOS04LjctNy44LTE1LjYtMTYuMi0xNy4xWm0tNS40LDMwLjZjLTUuNC0xLjItOS02LjMtOS0xMS43aDBjMC00LjIsMi4xLTcuOCw1LjctOS42LDguNy00LjIsMTcuMSwyLjEsMTcuMSwxMC4yLC4zLDYuOS02LjMsMTIuNi0xMy44LDExLjFaIi8+PHBhdGggY2xhc3M9ImMiIGQ9Ik0xOTYuNTQsMTMuNzNjLTEwLjgsMC0xOS4yLDguNy0xOS4yLDE5LjJzOC43LDE5LjIsMTkuMiwxOS4yLDE5LjItOC43LDE5LjItMTkuMmMuMy0xMC44LTguNC0xOS4yLTE5LjItMTkuMlptMCwzMC45Yy02LjMsMC0xMS40LTUuMS0xMS40LTExLjRzNS4xLTExLjQsMTEuNC0xMS40LDExLjQsNS4xLDExLjQsMTEuNGMuMyw2LTUuMSwxMS40LTExLjQsMTEuNFoiLz48Zz48cGF0aCBjbGFzcz0iYiIgZD0iTTI1Ni44NCwxNi4xM2MtOS45LDAtMTgsOC4xLTE4LDE4czguMSwxOCwxOCwxOCwxOC04LjEsMTgtMTgtOC4xLTE4LTE4LTE4Wm0wLDMwLjZjLTYuOSwwLTEyLjYtNS43LTEyLjYtMTIuNnM1LjctMTIuNiwxMi42LTEyLjYsMTIuNiw1LjcsMTIuNiwxMi42LTUuNywxMi42LTEyLjYsMTIuNloiLz48cGF0aCBjbGFzcz0iYiIgZD0iTTI5NS41NCwxNi4xM2MtOS45LDAtMTgsOC4xLTE4LDE4czguMSwxOCwxOCwxOCwxOC04LjEsMTgtMTgtOC4xLTE4LTE4LTE4Wm0wLDMwLjZjLTYuOSwwLTEyLjYtNS43LTEyLjYtMTIuNnM1LjctMTIuNiwxMi42LTEyLjYsMTIuNiw1LjcsMTIuNiwxMi42LTUuNywxMi42LTEyLjYsMTIuNloiLz48cGF0aCBjbGFzcz0iYiIgZD0iTTM0Ni44NCwxNi4xM2MtNC44LDAtOS4zLDEuOC0xMi42LDUuMVY5LjUzYzAtMi4xLTEuOC0zLjYtMy42LTMuNi0uOSwwLTEuOCwuOS0xLjgsMS44VjQ4LjUzYzAsMi4xLDEuOCwzLjYsMy42LDMuNiwuOSwwLDEuOC0uOSwxLjgtMS44di0zYzMuMywzLDcuNSw1LjEsMTIuNiw1LjEsOS45LDAsMTgtOC4xLDE4LTE4cy03LjgtMTguMy0xOC0xOC4zWm0wLDMwLjZjLTYuOSwwLTEyLjYtNS43LTEyLjYtMTIuNnM1LjctMTIuNiwxMi42LTEyLjYsMTIuNiw1LjcsMTIuNiwxMi42LTUuNywxMi42LTEyLjYsMTIuNloiLz48cGF0aCBjbGFzcz0iYiIgZD0iTTM4NS44NCwxNi4xM2MtOS45LDAtMTgsOC4xLTE4LDE4czguMSwxOCwxOCwxOCwxOC04LjEsMTgtMTgtOC4xLTE4LTE4LTE4Wm0wLDMwLjZjLTYuOSwwLTEyLjYtNS43LTEyLjYtMTIuNnM1LjctMTIuNiwxMi42LTEyLjYsMTIuNiw1LjcsMTIuNiwxMi42LTUuNywxMi42LTEyLjYsMTIuNloiLz48cGF0aCBjbGFzcz0iYiIgZD0iTTMxOS4yNCw1LjYzYy0uOSwwLTEuOCwuOS0xLjgsMS44VjQ4LjIzYzAsMi4xLDEuOCwzLjYsMy42LDMuNiwuOSwwLDEuOC0uOSwxLjgtMS44VjkuNTNjLjMtMi4xLTEuNS0zLjktMy42LTMuOVoiLz48cGF0aCBjbGFzcz0iYiIgZD0iTTQyMC45NCwzNC4xM2wxMC4yLTE1LjljLjYtLjksMC0yLjQtMS4yLTIuNGgwYy0yLjQsMC00LjgsMS4yLTYsMy4zbC02LDkuNi02LTkuNmMtMS4yLTIuMS0zLjYtMy4zLTYtMy4zLTEuMiwwLTEuOCwxLjItMS4yLDIuNGwxMC4yLDE1LjktMTAuMiwxNS45Yy0uNiwuOSwwLDIuNCwxLjIsMi40aDBjMi40LDAsNC44LTEuMiw2LTMuM2w2LTkuNiw2LDkuNmMxLjIsMi4xLDMuNiwzLjMsNiwzLjNoMGMxLjIsMCwxLjgtMS4yLDEuMi0yLjRsLTEwLjItMTUuOVoiLz48cGF0aCBjbGFzcz0iYiIgZD0iTTI0Mi43NCwxMy43M2MyLjEsMCwzLjYtMS44LDMuNi0zLjYsMC0uOS0uOS0xLjgtMS44LTEuOGgtMjcuM2MtMi4xLDAtMy42LDEuOC0zLjYsMy42LDAsLjksLjksMS44LDEuOCwxLjhoMTEuN1Y0OC41M2MwLDIuMSwxLjgsMy42LDMuNiwzLjYsLjksMCwxLjgtLjksMS44LTEuOFYxMy43M2gxMC4yWiIvPjwvZz48cGF0aCBjbGFzcz0iYyIgZD0iTTk2LjY0LDQ5LjEzbC0yMS4zLTIxLjMsMTcuNy0xNy43Yy45LS45LC4zLTIuNC0uOS0yLjRoLTMuM2MtMi43LDAtNS40LDEuMi03LjIsM2wtMTUuOSwxNS45VjEyLjgzYzAtMy0yLjQtNS4xLTUuMS01LjFoMGMtMS4yLDAtMi40LDEuMi0yLjQsMi40VjQ2LjczYzAsMywyLjQsNS4xLDUuMSw1LjFoMGMxLjIsMCwyLjQtMS4yLDIuNC0yLjR2LTcuOGMwLTIuNCwuOS00LjUsMi40LTZsMi4xLTIuMSwxNSwxNWMxLjgsMS44LDQuNSwzLDcuMiwzaDMuM2MxLjIsMCwxLjgtMS41LC45LTIuNFoiLz48Zz48cGF0aCBjbGFzcz0iYiIgZD0iTTMxLjU0LDM4LjAzdjUuMWMwLDMtMi40LDUuMS01LjEsNS4xSDE1LjM0Yy0zLDAtNS4xLTIuNC01LjEtNS4xVjE0LjMzYzAtMywyLjQtNS4xLDUuMS01LjFoMTEuMWMzLDAsNS4xLDIuNCw1LjEsNS4xdi42Yy45LS4zLDIuMS0uNiwzLS42LDEuMiwwLDIuNCwuMywzLjYsLjZ2LS45YzAtNi42LTUuNC0xMi0xMi0xMkgxNS4wNEM4LjQ0LDIuMDMsMy4wNCw3LjQzLDMuMDQsMTQuMDN2MjguOGMwLDYuNiw1LjQsMTIsMTIsMTJoMTEuMWM2LjYsMCwxMi01LjQsMTItMTJ2LTEyLjlsLTYuNiw4LjFaIi8+PHBhdGggY2xhc3M9ImIiIGQ9Ik0yNi4xNCwzNi4yM2wxMi0xMy44Yy4zLS4zLC4zLTEuMiwwLTEuNWgwYy0yLjEtMS44LTUuNC0xLjUtNy4yLC42bC03LjUsOC43Yy0uMywuMy0uNiwuMy0uNiwwbC0yLjctMy4zYy0uNi0uNi0xLjUtLjYtMi4xLDBoMGMtMS44LDEuOC0xLjgsNC44LS4zLDYuOWwyLjQsMi43YzEuMiwxLjgsNC4yLDEuOCw2LS4zWiIvPjwvZz48L3N2Zz4K" alt="brand logo"></div></div><div class="form-header__filler"></div><button class="form-header__button--print btn-bg-icon-only" onclick="return false;"></button><span class="form-language-selector hide"><span data-i18n="form.chooseLanguage">Choose Language</span></span><button class="form-header__button--homescreen btn-icon-only hide" type="button" aria-label="add to homescreen"><i class="icon icon-bookmark-o"> </i></button><nav class="pages-toc hide" role="navigation"><label for="toc-toggle"></label><input class="ignore" id="toc-toggle" type="checkbox" value="show"><ul class="pages-toc__list"></ul><div class="pages-toc__overlay"></div></nav></header><section class="form-footer"><div class="form-footer__content"><div class="form-footer__content__main-controls"><button class="btn btn-default" id="save-draft"><i class="icon icon-info-circle save-draft-info"> </i><i class="icon icon-pencil"> </i><span data-i18n="formfooter.savedraft.btn">Save Draft</span></button><button class="btn btn-primary" id="submit-form"><i class="icon icon-check"> </i><span data-i18n="formfooter.submit.btn">Submit</span></button><a class="btn btn-primary next-page" href="#"><i class="icon icon-arrow-right"></i><span data-i18n="form.pages.next">Next</span></a><div class="logout hide"><a href="/logout" title="log out of all enketo forms that require authentication" data-i18n="form.logout">log out</a></div><!-- If you're considering changing this, be careful not to violate licence terms.--><div class="enketo-power"></div><a class="previous-page disabled" href="#" data-i18n="form.pages.back">Back</a></div><div class="form-footer__content__jump-nav"><a class="btn btn-default disabled first-page" href="#" data-i18n="form.pages.return">Return to Beginning</a><a class="btn btn-default disabled last-page" href="#" data-i18n="form.pages.end">Go to End</a></div></div></section></article></div><aside class="record-list side-slider"><button class="btn-icon-only close" type="button" aria-hidden="true">×</button><h3 data-i18n="record-list.title">Queue</h3><p data-i18n="record-list.msg1">Records are stored inside your browser until they have been uploaded (even if you turn off your computer or go offline).</p><ul class="record-list__records"></ul><div class="record-list__button-bar"><button class="record-list__button-bar__button upload btn btn-primary" type="button" disabled data-i18n="record-list.upload">Upload</button><button class="record-list__button-bar__button export btn btn-default" type="button" disabled data-i18n="record-list.export">Export</button></div><p data-i18n="record-list.msg2" data-i18n-icon="icon-pencil">Queued records, except those marked as draft <span class="icon icon-pencil"> </span>, are uploaded automatically, in the background, every 5 minutes when the web page is open and an Internet connection is available.</p><p data-i18n="record-list.msg3">To force an upload in between automatic attempts, click Upload.</p><p class="side-slider__app-version"><span data-i18n="version">version:</span><span class="side-slider__app-version__value"></span></p><p class="side-slider__update hide"><span data-i18n="update.newversion">New version available</span><a class="side-slider__update__reload" href="#" data-i18n="update.reload">reload to update</a></p><p class="side-slider__advanced hide"><button class="side-slider__advanced__button flush-db btn btn-default" type="button" data-i18n="advanced.flushdb">Clear Storage</button></p></aside><button class="side-slider__toggle open" type="button" aria-label="open"></button><button class="side-slider__toggle close" type="button" aria-label="close"></button><div class="slider-overlay"></div><div class="alert-box warning" id="feedback-bar"><span class="icon icon-info-circle"></span><button class="btn-icon-only close">&times;</button></div><script id="main-script" defer type="module" src="/x/js/build/enketo-webform.js"></script><script>var env = {"googleApiKey":"AIzaSyD7o1SHWpS8DTeMKf9aO_M1lTnX47p0kCc","maps":[{"name":"humanitarian","tiles":["https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"],"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> & <a href=\"https://www.hotosm.org/updates/2013-09-29_a_new_window_on_openstreetmap_data\">Yohan Boniface & Humanitarian OpenStreetMap Team<\/a> | <a href=\"https://www.openstreetmap.org/copyright\">Terms<\/a>"},{"name":"satellite","tiles":["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],"attribution":"Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"},{"name":"terrain","tiles":["https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"],"attribution":"&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap<\/a> | <a href=\"https://www.openstreetmap.org/copyright\">Terms<\/a>"},{"name":"streets","tiles":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"],"attribution":"&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap<\/a> | <a href=\"https://www.openstreetmap.org/copyright\">Terms<\/a>"}],"modernBrowsersURL":"modern-browsers","supportEmail":"support@kobotoolbox.org","themesSupported":["formhub","grid","kobo","plain"],"defaultTheme":"kobo","languagesSupported":["ar","cs","de","el","en","es","fa","fi","fr","hi","it","ka","lo","nl","no","pl","pt","ro","ru","sk","sq","sv","sw","tr","uk","vi","zh"],"timeout":300000,"submissionParameter":{"name":""},"basePath":"","repeatOrdinals":false,"validateContinuously":false,"validatePage":true,"textMaxChars":"1000000","csrfCookieName":"__csrf__kobotoolbox_org","excludeNonRelevant":false,"experimentalOptimizations":{"computeAsync":false},"hidePoweredBy":true};
+</script><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6RF102RFCS"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-6RF102RFCS');</script></body></html>

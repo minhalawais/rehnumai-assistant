@@ -16,7 +16,7 @@ export default function IntakePage() {
   }, [router]);
 
   return (
-    <PublicIntakeShell title={copy(language, "Rehnumai form", "رہنمائی کا فارم")}>
+    <PublicIntakeShell title={copy(language, "Migration form", "مائیگریشن فارم")}>
       <PublicIntakeForm surface="page" />
     </PublicIntakeShell>
   );

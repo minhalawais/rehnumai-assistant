@@ -11,7 +11,7 @@ export const siteConfig = {
 } as const;
 
 export const pageTitles = {
-  login: "Staff sign in",
+  login: "Login",
   intake: "Migration intake form",
   portal: "Staff portal",
   submissions: "Submitted forms",

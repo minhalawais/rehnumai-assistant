@@ -2,7 +2,7 @@ export type CaseSummary = {
   caseReference: string;
   status: string;
   applicantSummary?: { displayName?: string };
-  migrationSummary?: { stage?: string; purpose?: string; destinationCountry?: string };
+  migrationSummary?: { category?: string; stage?: string; purpose?: string; destinationCountry?: string };
   attentionSignalCodes?: string[];
   assignedUserId?: string;
   updatedAt?: string;
@@ -39,7 +39,7 @@ export function friendlyStatus(status: string) {
 
 export function friendlyStage(stage?: string) { return stage ? stage.replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase()) : "Not set"; }
 export function localizedStage(stage: string | undefined, language: "ur" | "en") { if (language === "en") return friendlyStage(stage); return ({ exploring: "غور کر رہے ہیں", preparing: "تیاری", offer_received: "پیشکش ملی ہے", pre_departure: "روانگی سے پہلے", overseas: "بیرون ملک", returned: "واپس آ گئے ہیں", employment: "ملازمت", education: "تعلیم", family: "خاندان", visit: "دورہ", returning_to_job: "ملازمت پر واپسی", undecided: "ابھی طے نہیں", other: "دیگر" } as Record<string, string>)[stage ?? ""] ?? "معلوم نہیں"; }
-export function localizedStatus(status: string, language: "ur" | "en") { if (language === "en") return friendlyStatus(status); return ({ draft: "ڈرافٹ", submitted: "جمع شدہ", under_review: "زیر جائزہ", needs_correction: "اصلاح درکار", on_hold: "روکا گیا", closed: "بند" } as Record<string, string>)[status] ?? status; }
+export function localizedStatus(status: string, language: "ur" | "en") { if (language === "en") return friendlyStatus(status); return ({ draft: "ڈرافٹ", submitted: "جمع ہو چکا", under_review: "ٹیم دیکھ رہی ہے", needs_correction: "درستگی چاہیے", on_hold: "روک دیا گیا", closed: "بند" } as Record<string, string>)[status] ?? status; }
 export function shortDate(value?: string, language: "ur" | "en" = "en") {
   if (!value) return "—";
   const locale = language === "ur" ? "ur-PK" : "en-PK";
