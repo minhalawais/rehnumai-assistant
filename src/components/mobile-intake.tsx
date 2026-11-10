@@ -29,9 +29,10 @@ export function MobileIntake({ form, update, language, saveState, error, correct
   const titleRef = useRef<HTMLHeadingElement>(null);
   const pendingQuestionId = useRef<string | undefined>(undefined);
 
-  const questions = useMemo(() => buildKoboIntakeQuestions(form), [form]);
+  const questions = useMemo(() => buildKoboIntakeQuestions(form), [form.migrantCategory]);
   const currentIndex = Math.min(index, Math.max(0, questions.length - 1));
   const question = questions[currentIndex] ?? questions[0];
+  const questionId = question?.id ?? "";
 
   useEffect(() => {
     if (fillPage) return;
@@ -44,15 +45,19 @@ export function MobileIntake({ form, update, language, saveState, error, correct
   }, [questions, fillPage]);
 
   useEffect(() => {
-    if (!question) return;
+    if (!questionId) return;
     if (!fillPage) {
       if (pendingQuestionId.current) return;
       const url = new URL(window.location.href);
-      url.searchParams.set("question", question.id);
-      window.history.replaceState(null, "", `${url.pathname}${url.search}`);
+      if (url.searchParams.get("question") !== questionId) {
+        url.searchParams.set("question", questionId);
+        window.history.replaceState(null, "", `${url.pathname}${url.search}`);
+      }
     }
-    titleRef.current?.focus();
-  }, [question, fillPage]);
+    const active = document.activeElement;
+    const typing = active instanceof HTMLInputElement || active instanceof HTMLTextAreaElement || active instanceof HTMLSelectElement;
+    if (!typing) titleRef.current?.focus({ preventScroll: true });
+  }, [questionId, fillPage]);
 
   function move(next: number) {
     setQuestionError("");
