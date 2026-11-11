@@ -28,7 +28,7 @@ function readableParagraphs(text: string): string[] {
   return chunks;
 }
 
-const HUB_COUNT = { government: ["9 bodies", "۹ ادارے"], international: ["2 bodies", "۲ ادارے"] } as const;
+const HUB_COUNT = { government: ["10 bodies", "۱۰ ادارے"], international: ["3 bodies", "۳ ادارے"] } as const;
 const HUB_ART = { government: "/menu-icons/support-government.jpg", international: "/menu-icons/support-international.jpg" } as const;
 
 export function SupportHub() {
@@ -79,12 +79,14 @@ export function SupportGroupPage({ groupId }: { groupId: string }) {
         <div className="agency-list">
           {group.agencies.map((agency) => {
             const names = new Set(agency.nameUr.map((name) => name.trim()));
-            const paragraphs = agency.paragraphs.filter((paragraph) => !names.has(paragraph.trim()));
+            const paragraphs = agency.paragraphs
+              .filter((paragraph) => !names.has(paragraph.trim()))
+              .flatMap((paragraph) => agency.id === "puwf" ? [paragraph.replace(/\s+/g, " ").trim()] : readableParagraphs(paragraph));
             const title = copy(language, agency.nameEn, agency.nameUr.join(" "));
             return (
               <article key={agency.id} className="agency">
                 <div className="agency__body">
-                  {paragraphs.flatMap((paragraph) => readableParagraphs(paragraph)).map((paragraph, index) => (
+                  {paragraphs.map((paragraph, index) => (
                     <p key={index} className="agency__p urdu"><LinkText text={paragraph} /></p>
                   ))}
                 </div>

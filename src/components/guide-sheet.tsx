@@ -69,6 +69,16 @@ function splitHead(rows: string[][]): { head: string[] | null; body: string[][] 
   return short ? { head: first, body: rows.slice(1) } : { head: null, body: rows };
 }
 
+function stepColumns(head: string[] | null): { number: number; title: number; detail: number } | null {
+  if (!head || head.length !== 3) return null;
+  const labels = head.map(shortLabel);
+  const number = labels.indexOf("نمبر");
+  const title = labels.indexOf("اقدام");
+  const detail = labels.indexOf("تفصیل");
+  if (number < 0 || title < 0 || detail < 0) return null;
+  return { number, title, detail };
+}
+
 function phoneLayout(rows: string[][]): "columns" | "rows" {
   const { head, body } = splitHead(rows);
   const data = head ? body : rows;
@@ -87,6 +97,25 @@ function toHref(raw: string) {
   return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
 }
 
+const PHONE_PATTERN = /(?:\+|00)?\d{1,4}(?:[\s.-]\d{2,}){2,}/g;
+
+function withPhones(text: string, keyPrefix: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  const pattern = new RegExp(PHONE_PATTERN.source, "g");
+  let last = 0;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(text))) {
+    if (match.index > last) nodes.push(text.slice(last, match.index));
+    nodes.push(
+      <bdi key={`${keyPrefix}-phone-${match.index}`} dir="ltr">{match[0]}</bdi>,
+    );
+    last = match.index + match[0].length;
+  }
+  if (!nodes.length) return [text];
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes;
+}
+
 function linkNodes(text: string) {
   const prepared = text.replace(/(?<=\S)(?=https?:\/\/)/gi, " ").replace(/(?<=\w)(?=www\.)/gi, " ");
   const nodes: ReactNode[] = [];
@@ -96,9 +125,9 @@ function linkNodes(text: string) {
   while ((match = pattern.exec(prepared))) {
     const raw = cleanUrl(match[0]);
     if (raw.length < 4 || !raw.includes(".")) continue;
-    if (match.index > last) nodes.push(prepared.slice(last, match.index));
+    if (match.index > last) nodes.push(...withPhones(prepared.slice(last, match.index), `t${match.index}`));
     nodes.push(
-      <a key={`${match.index}-${raw}`} className="guide__link" href={toHref(raw)} target="_blank" rel="noopener noreferrer">
+      <a key={`${match.index}-${raw}`} className="guide__link" href={toHref(raw)} dir="ltr" target="_blank" rel="noopener noreferrer">
         {raw}
       </a>,
     );
@@ -106,8 +135,8 @@ function linkNodes(text: string) {
     if (trimmed) nodes.push(trimmed);
     last = match.index + match[0].length;
   }
-  if (!nodes.length) return text;
-  if (last < prepared.length) nodes.push(prepared.slice(last));
+  if (!nodes.length) return withPhones(prepared, "t");
+  if (last < prepared.length) nodes.push(...withPhones(prepared.slice(last), "end"));
   return nodes;
 }
 
@@ -148,6 +177,7 @@ function figureCaption(src: string, alt: string): string | null {
 function GuideTable({ rows }: { rows: string[][] }) {
   const { head, body } = splitHead(rows);
   const layout = phoneLayout(rows);
+  const steps = stepColumns(head);
   const data = head ? body : rows;
 
   return (
@@ -169,7 +199,20 @@ function GuideTable({ rows }: { rows: string[][] }) {
           })}
         </div>
       ) : null}
-      {layout === "rows" ? (
+      {layout === "rows" && steps ? (
+        <div className="guide__stacked">
+          {data.map((row, rowIndex) => (
+            <article key={rowIndex} className="guide__step">
+              <header className="guide__step-head">
+                <span className="guide__step-num" dir="ltr">{row[steps.number]?.trim()}</span>
+                <h3 className="guide__step-title urdu">{row[steps.title]?.trim()}</h3>
+              </header>
+              <Points text={row[steps.detail] ?? ""} />
+            </article>
+          ))}
+        </div>
+      ) : null}
+      {layout === "rows" && !steps ? (
         <div className="guide__stacked">
           {(head ? body : rows).map((row, rowIndex) => {
             const filled = row.map((cell) => cell.trim()).filter(Boolean);

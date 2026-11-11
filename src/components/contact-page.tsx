@@ -47,9 +47,9 @@ export function ContactPage() {
     <ManzilMenuFrame>
       <div className="support-page contact-page">
         <header className="contact-page__head">
-          <h1 className="guide__title urdu">{copy(language, "Contact us", "رابطہ کریں")}</h1>
+          <h1 className="guide__title urdu">{copy(language, "Complaints", "شکایات")}</h1>
           <p className="contact-page__lead urdu">
-            {copy(language, "Official complaint and help contacts from the migration booklet.", "مائیگریشن کتابچے میں درج سرکاری شکایت اور مدد کے رابطے۔")}
+            {copy(language, "Official places to file a migration complaint.", "ہجرت سے متعلق شکایت درج کرنے کے سرکاری ادارے۔")}
           </p>
         </header>
         <div className="contact-list">

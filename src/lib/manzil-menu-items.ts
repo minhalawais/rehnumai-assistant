@@ -150,5 +150,5 @@ export const MANZIL_MENU_DOCK = [
   { id: "home", href: "/", icon: "home" as const, labelEn: "Home", labelUr: "گھر" },
   { id: "booklet", href: "/booklet", icon: "book" as const, labelEn: "Full booklet", labelUr: "مکمل کتابچہ" },
   { id: "support", href: "/support", icon: "offices" as const, labelEn: "Official bodies", labelUr: "مددگار سرکاری ادارے" },
-  { id: "contact", href: "/contact", icon: "contact" as const, labelEn: "Contact us", labelUr: "رابطہ کریں" },
+  { id: "contact", href: "/contact", icon: "contact" as const, labelEn: "Complaints", labelUr: "شکایات" },
 ] as const;

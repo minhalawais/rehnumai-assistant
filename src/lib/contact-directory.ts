@@ -25,6 +25,19 @@ const mail = (value: string) => `mailto:${value}`;
 /** Complaint contacts from booklet annex 4. English values stay in source order. */
 export const CONTACT_ENTRIES: ContactEntry[] = [
   {
+    id: "beoe",
+    titleUr: "رجسٹرڈ ایجنٹ یا آجر کے خلاف شکایت",
+    titleEn: "Complaint against registered agents or employers",
+    office: "Bureau of Emigration and Overseas Employment (BEOE)",
+    facts: [
+      { labelUr: "فون", labelEn: "Tel", value: "+92-51-910-7267", href: tel("+92-51-910-7267") },
+      { labelUr: "واٹس ایپ", labelEn: "WhatsApp", value: "+92-332-9107265", href: tel("+92-332-9107265") },
+      { labelUr: "ای میل", labelEn: "Email", value: "complaints@beoe.gov.pk", href: mail("complaints@beoe.gov.pk") },
+      { labelUr: "پتہ", labelEn: "Address", value: "Bureau of Emigration & Overseas Employment, Emigration Tower, Plot No. 10, Mauve Area, G-8/1, Islamabad, Pakistan" },
+      { labelUr: "آن لائن شکایت", labelEn: "Online complaint", value: "beoe.gov.pk/feedback-complaints", href: web("https://beoe.gov.pk/feedback-complaints") },
+    ],
+  },
+  {
     id: "ombudsman",
     titleUr: "وفاقی وزارتوں یا محکموں کے خلاف شکایت",
     titleEn: "Complaints against Federal Ministries or Departments",
@@ -36,18 +49,6 @@ export const CONTACT_ENTRIES: ContactEntry[] = [
       { labelUr: "آن لائن شکایت", labelEn: "Online complaint", value: "mohtasib.gov.pk", href: web("https://www.mohtasib.gov.pk/Detail/NWRkZDJmMTYtZmRiOC00MTAyLTk2ZDItZGVlNTkxMTdmNTEz") },
       { labelUr: "ویب سائٹ", labelEn: "Website", value: "ombudsman.gov.pk", href: web("www.ombudsman.gov.pk") },
       { labelUr: "فوکل پرسنز", labelEn: "Focal persons", value: "mohtasib.gov.pk", href: web("https://www.mohtasib.gov.pk/Detail/OTU2NTEzNTItNDNlNi00MTIxLTliNzgtMGQ3ZDc1NjdmM2Fm") },
-    ],
-  },
-  {
-    id: "beoe",
-    titleUr: "رجسٹرڈ ایجنٹ یا آجر کے خلاف شکایت",
-    titleEn: "Complaint against registered agents or employers",
-    office: "Bureau of Emigration and Overseas Employment (BEOE)",
-    facts: [
-      { labelUr: "فون", labelEn: "Tel", value: "+92 51 9107272", href: tel("+92 51 9107272") },
-      { labelUr: "فیکس", labelEn: "Fax", value: "+92 51 9107270", href: tel("+92 51 9107270") },
-      { labelUr: "پتہ", labelEn: "Address", value: "Bureau of Emigration & Overseas Employment, Emigration Tower, Plot No. 10, Mauve Area, G-8/1, Islamabad, Pakistan" },
-      { labelUr: "ویب سائٹ", labelEn: "Website", value: "beoe.gov.pk", href: web("www.beoe.gov.pk") },
     ],
   },
   {
