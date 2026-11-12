@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Home, Landmark, Phone } from "lucide-react";
+import { BookOpen, CircleHelp, Home, Landmark, MessageSquareWarning } from "lucide-react";
 import { copy, LanguageSwitch, useLocale } from "@/components/locale";
 import { PartnerLogos } from "@/components/partner-logos";
 import { MANZIL_MENU_DOCK, MANZIL_MENU_SECTIONS } from "@/lib/manzil-menu-items";
 import { MANZIL_APP_TAGLINE_EN } from "@/lib/manzil-intro-copy";
 
-const dockIcons = { home: Home, book: BookOpen, offices: Landmark, contact: Phone } as const;
+const dockIcons = { home: Home, book: BookOpen, offices: Landmark, faq: CircleHelp, contact: MessageSquareWarning } as const;
 
 export function ManzilMenuFrame({ children }: { children: React.ReactNode }) {
   const { language } = useLocale();
@@ -32,7 +32,7 @@ export function ManzilMenuFrame({ children }: { children: React.ReactNode }) {
           const DockIcon = dockIcons[item.icon];
           const active = item.href === "/" ? pathname === "/" || pathname.startsWith("/menu") || pathname.startsWith("/guide") : pathname.startsWith(item.href);
           return <Link key={item.id} href={item.href} aria-current={active ? "page" : undefined} className={`manzil-menu__dock-link focus-ring${active ? " manzil-menu__dock-link--active" : ""}`}>
-            <DockIcon size={19} aria-hidden strokeWidth={2} /><span className="urdu">{copy(language, item.labelEn, item.labelUr)}</span>
+            <DockIcon size={19} aria-hidden strokeWidth={2} /><span className={item.id === "faq" ? "manzil-menu__dock-latin" : "urdu"} dir={item.id === "faq" ? "ltr" : undefined}>{copy(language, item.labelEn, item.labelUr)}</span>
           </Link>;
         })}
       </nav>
