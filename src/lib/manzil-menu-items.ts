@@ -23,15 +23,16 @@ export type ManzilMenuSection = {
 export const MANZIL_MENU_SECTIONS: ManzilMenuSection[] = [
   {
     id: "prepare",
-    icon: "/menu-icons/section-prepare.jpg",
+    icon: "/menu-icons/section-prepare-v2.jpg",
     titleEn: "Prepare for work abroad",
     titleUr: "بیرون ممالک ملازمت کی تیاری",
     groups: [
       {
-        id: "trends",
-        titleEn: "Trends in work abroad",
-        titleUr: "بیرون ممالک ملازمت کے رجحانات",
+        id: "prepare-open",
+        titleEn: "Labour migration. Work abroad",
+        titleUr: "لیبر مائیگریشن۔بیرون ممالک ملازمت",
         items: [
+          { id: "trends", page: 5, titleEn: "Trends in work abroad", titleUr: "بیرون ممالک ملازمت کے رجحانات" },
           { id: "legal-vs-illegal", page: 5, titleEn: "Benefits and costs of legal and illegal routes", titleUr: "قانونی اور غیر قانونی طریقے سے بیرون ممالک ملازمت کے فوائد اور نقصان" },
           { id: "dunki", page: 6, titleEn: "The reality and costs of illegal routes (dunki)", titleUr: "غیر قانونی طریقے (ڈنکی کے ذریعے) سے بیرون ممالک جانے کی حقیقت اور نقصانات" },
           { id: "psychological", page: 7, titleEn: "Psychological effects on people who migrate illegally", titleUr: "غیر قانونی تارکین وطن کو متاثر کرنے والے نفسیاتی عوامل" },
@@ -39,9 +40,10 @@ export const MANZIL_MENU_SECTIONS: ManzilMenuSection[] = [
       },
       {
         id: "planning",
-        titleEn: "Labour migration planning",
-        titleUr: "لیبر مائیگریشن (Labour Migration)۔ بیرون ملک جانے کی پلاننگ",
+        titleEn: "Planning to go abroad",
+        titleUr: "۔بیرون ملک جانے کی پلاننگ",
         items: [
+          { id: "planning-intro", page: 8, titleEn: "Labour migration. Planning to go abroad", titleUr: "لیبر مائیگریشن (Labour Migration) ۔بیرون ملک جانے کی پلاننگ" },
           { id: "documents", page: 9, titleEn: "Documents needed for work abroad", titleUr: "بیرون ممالک ملازمت کیلئے ضروری دستاویزات" },
           { id: "skills-review", page: 9, titleEn: "Review of your skills and education", titleUr: "ذاتی مہارتوں اور تعلیم کا جائزہ" },
           { id: "cv", page: 10, titleEn: "Writing a CV", titleUr: "سی وی بنانا" },
@@ -73,7 +75,7 @@ export const MANZIL_MENU_SECTIONS: ManzilMenuSection[] = [
   },
   {
     id: "work",
-    icon: "/menu-icons/section-work.jpg",
+    icon: "/menu-icons/section-work-v2.jpg",
     titleEn: "Arrival and stay abroad",
     titleUr: "بیرون ملک آمد اور قیام",
     groups: [
@@ -82,6 +84,12 @@ export const MANZIL_MENU_SECTIONS: ManzilMenuSection[] = [
         titleEn: "Arrival and airport precautions",
         titleUr: "بیرون ملک آمد۔ ایئر پورٹ کی احتیاطیں",
         items: [
+          {
+            id: "arrival-airport",
+            page: 19,
+            titleEn: "Airport precautions on arrival",
+            titleUr: "بیرون ملک آمد - ایئر پورٹ کی احتیاطیں",
+          },
           { id: "employer", page: 20, titleEn: "Who is the employer?", titleUr: "آجر کون؟" },
           { id: "culture", page: 21, titleEn: "Cultural and ethical values", titleUr: "ثقافتی اور اخلاقی اقدار" },
           { id: "respect-laws", page: 22, titleEn: "Why respect for local culture and law matters", titleUr: "غیر ملکی ثقافت، قوانین کا احترام کیوں ضروری ہے۔ ایک تلخ تجربہ" },
@@ -100,6 +108,7 @@ export const MANZIL_MENU_SECTIONS: ManzilMenuSection[] = [
         titleEn: "Ways to send money (remittances)",
         titleUr: "رقوم کی منتقلی کے ذرائع (Remittances)",
         items: [
+          { id: "remittance-channels", page: 32, titleEn: "Ways to send remittances", titleUr: "رقوم کی منتقلی کے ذرائع (Remittances)" },
           { id: "formal-informal", page: 33, titleEn: "Benefits and costs of formal and informal transfers", titleUr: "رسمی اور غیر رسمی طریقوں سے رقم بھیجنے کے فوائد و نقصانات" },
           { id: "private-companies", page: 34, titleEn: "Private companies", titleUr: "نجی کمپنیاں" },
         ],
@@ -108,7 +117,7 @@ export const MANZIL_MENU_SECTIONS: ManzilMenuSection[] = [
   },
   {
     id: "return",
-    icon: "/menu-icons/section-return.jpg",
+    icon: "/menu-icons/section-return-v2.jpg",
     titleEn: "Roadmap for return to Pakistan",
     titleUr: "پاکستان واپسی کا روڈمیپ",
     groups: [

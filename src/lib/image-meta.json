@@ -1,0 +1,666 @@
+{
+  "/GC.png": {
+    "width": 256,
+    "height": 134
+  },
+  "/brand/manzil-app-icon-192.png": {
+    "width": 192,
+    "height": 192
+  },
+  "/brand/manzil-app-icon-512.png": {
+    "width": 512,
+    "height": 512
+  },
+  "/brand/manzil-lockup.png": {
+    "width": 1200,
+    "height": 630
+  },
+  "/brand/manzil-mark-128.png": {
+    "width": 128,
+    "height": 128
+  },
+  "/brand/manzil-mark-16.png": {
+    "width": 16,
+    "height": 16
+  },
+  "/brand/manzil-mark-180.png": {
+    "width": 180,
+    "height": 180
+  },
+  "/brand/manzil-mark-32.png": {
+    "width": 32,
+    "height": 32
+  },
+  "/brand/manzil-mark-48.png": {
+    "width": 48,
+    "height": 48
+  },
+  "/brand/manzil-mark-96.png": {
+    "width": 96,
+    "height": 96
+  },
+  "/brand/manzil_logo.jpeg": {
+    "width": 640,
+    "height": 640
+  },
+  "/government_Logo.png": {
+    "width": 224,
+    "height": 256
+  },
+  "/guide/image101.jpeg": {
+    "width": 349,
+    "height": 360
+  },
+  "/guide/image102.png": {
+    "width": 245,
+    "height": 245
+  },
+  "/guide/image107.png": {
+    "width": 1017,
+    "height": 568
+  },
+  "/guide/image108.png": {
+    "width": 1007,
+    "height": 455
+  },
+  "/guide/image109.png": {
+    "width": 606,
+    "height": 358
+  },
+  "/guide/image18.png": {
+    "width": 242,
+    "height": 327
+  },
+  "/guide/image19.png": {
+    "width": 261,
+    "height": 355
+  },
+  "/guide/image20.png": {
+    "width": 368,
+    "height": 332
+  },
+  "/guide/image21.png": {
+    "width": 273,
+    "height": 326
+  },
+  "/guide/image22.png": {
+    "width": 617,
+    "height": 267
+  },
+  "/guide/image23.png": {
+    "width": 439,
+    "height": 228
+  },
+  "/guide/image24.png": {
+    "width": 430,
+    "height": 229
+  },
+  "/guide/image25.jpeg": {
+    "width": 329,
+    "height": 202
+  },
+  "/guide/image26.png": {
+    "width": 308,
+    "height": 343
+  },
+  "/guide/image27.jpeg": {
+    "width": 220,
+    "height": 220
+  },
+  "/guide/image28.jpeg": {
+    "width": 236,
+    "height": 178
+  },
+  "/guide/image29.jpeg": {
+    "width": 952,
+    "height": 886
+  },
+  "/guide/image31.png": {
+    "width": 157,
+    "height": 65
+  },
+  "/guide/image35.png": {
+    "width": 110,
+    "height": 110
+  },
+  "/guide/image52.png": {
+    "width": 288,
+    "height": 256
+  },
+  "/guide/image53.png": {
+    "width": 137,
+    "height": 137
+  },
+  "/guide/image540.png": {
+    "width": 137,
+    "height": 137
+  },
+  "/guide/image55.jpeg": {
+    "width": 311,
+    "height": 311
+  },
+  "/guide/image62.jpeg": {
+    "width": 308,
+    "height": 327
+  },
+  "/guide/image63.png": {
+    "width": 1018,
+    "height": 464
+  },
+  "/guide/image65.png": {
+    "width": 1352,
+    "height": 748
+  },
+  "/guide/image85.jpeg": {
+    "width": 359,
+    "height": 359
+  },
+  "/guide/image86.png": {
+    "width": 301,
+    "height": 377
+  },
+  "/guide/image87.png": {
+    "width": 736,
+    "height": 455
+  },
+  "/guide/image88.png": {
+    "width": 415,
+    "height": 490
+  },
+  "/guide/image9.jpeg": {
+    "width": 556,
+    "height": 314
+  },
+  "/guide/image92.png": {
+    "width": 88,
+    "height": 141
+  },
+  "/guide/image97.png": {
+    "width": 474,
+    "height": 354
+  },
+  "/guide/image98.png": {
+    "width": 959,
+    "height": 494
+  },
+  "/guide/image99.png": {
+    "width": 1017,
+    "height": 400
+  },
+  "/guide/job-portals/bayt.png": {
+    "width": 128,
+    "height": 128
+  },
+  "/guide/job-portals/careersingulf.png": {
+    "width": 128,
+    "height": 128
+  },
+  "/guide/job-portals/dubaicareers.png": {
+    "width": 128,
+    "height": 128
+  },
+  "/guide/job-portals/gulftalent.png": {
+    "width": 48,
+    "height": 48
+  },
+  "/guide/job-portals/indeed.png": {
+    "width": 128,
+    "height": 128
+  },
+  "/guide/job-portals/jobware.png": {
+    "width": 57,
+    "height": 57
+  },
+  "/guide/job-portals/linkedin.png": {
+    "width": 64,
+    "height": 64
+  },
+  "/guide/job-portals/monster.png": {
+    "width": 128,
+    "height": 128
+  },
+  "/guide/job-portals/stepstone.png": {
+    "width": 128,
+    "height": 128
+  },
+  "/guide/job-portals/xing.png": {
+    "width": 128,
+    "height": 128
+  },
+  "/guide/remittance-brands/moneygram.png": {
+    "width": 142,
+    "height": 43
+  },
+  "/guide/remittance-brands/transfast.png": {
+    "width": 155,
+    "height": 43
+  },
+  "/guide/remittance-brands/western-union.png": {
+    "width": 145,
+    "height": 40
+  },
+  "/guide/remittance-brands/worldremit.png": {
+    "width": 138,
+    "height": 50
+  },
+  "/guide/return-support/iom.png": {
+    "width": 126,
+    "height": 51
+  },
+  "/guide/return-support/mrc.png": {
+    "width": 124,
+    "height": 51
+  },
+  "/guide/return-support/pgfrc.png": {
+    "width": 77,
+    "height": 59
+  },
+  "/ilo_logo.jpg": {
+    "width": 256,
+    "height": 143
+  },
+  "/lrdi.png": {
+    "width": 256,
+    "height": 85
+  },
+  "/menu-icons/guide/airport-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/airport.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/arrival-airport-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/arrival-airport.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/authorities-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/authorities.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/beoe-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/beoe.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/checklist-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/checklist.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/culture-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/culture.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/cv-europe-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/cv-europe.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/cv-mistakes-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/cv-mistakes.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/cv-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/cv.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/departure-requirements-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/departure-requirements.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/destination-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/destination.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/digital-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/digital.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/documents-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/documents.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/dunki-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/dunki.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/employer-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/employer.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/formal-informal-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/formal-informal.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/health-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/health.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/job-search-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/job-search.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/language-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/language.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/legal-vs-illegal-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/legal-vs-illegal.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/obstacles-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/obstacles.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/oec-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/oec.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/oep-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/oep.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/planning-intro-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/planning-intro.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/private-companies-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/private-companies.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/psychological-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/psychological.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/reintegration-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/reintegration.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/reminders-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/reminders.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/remittance-channels-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/remittance-channels.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/residency-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/residency.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/respect-laws-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/respect-laws.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/return-prep-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/return-prep.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/return-support-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/return-support.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/rights-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/rights.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/self-check-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/self-check.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/skills-review-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/skills-review.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/smartphone-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/smartphone.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/trends-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/trends.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/visit-visa-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/visit-visa.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/women.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/workplace-rights-photo.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/guide/workplace-rights.jpg": {
+    "width": 512,
+    "height": 512
+  },
+  "/menu-icons/header-bg-v2.jpg": {
+    "width": 1280,
+    "height": 720
+  },
+  "/menu-icons/header-bg.jpg": {
+    "width": 1280,
+    "height": 720
+  },
+  "/menu-icons/return.jpg": {
+    "width": 1024,
+    "height": 1024
+  },
+  "/menu-icons/section-prepare-v2.jpg": {
+    "width": 1152,
+    "height": 864
+  },
+  "/menu-icons/section-prepare.jpg": {
+    "width": 1152,
+    "height": 864
+  },
+  "/menu-icons/section-return-v2.jpg": {
+    "width": 1152,
+    "height": 864
+  },
+  "/menu-icons/section-return.jpg": {
+    "width": 1152,
+    "height": 864
+  },
+  "/menu-icons/section-work-v2.jpg": {
+    "width": 1152,
+    "height": 864
+  },
+  "/menu-icons/section-work.jpg": {
+    "width": 1152,
+    "height": 864
+  },
+  "/menu-icons/support-government.jpg": {
+    "width": 1280,
+    "height": 720
+  },
+  "/menu-icons/support-international.jpg": {
+    "width": 1280,
+    "height": 720
+  },
+  "/puwf_logo.png": {
+    "width": 256,
+    "height": 242
+  },
+  "/support/image114.png": {
+    "width": 256,
+    "height": 58
+  },
+  "/support/image116.png": {
+    "width": 256,
+    "height": 51
+  },
+  "/support/image118.png": {
+    "width": 256,
+    "height": 58
+  },
+  "/support/image120.png": {
+    "width": 256,
+    "height": 69
+  },
+  "/support/image122.png": {
+    "width": 94,
+    "height": 94
+  },
+  "/support/image125.png": {
+    "width": 187,
+    "height": 77
+  },
+  "/support/image126.jpeg": {
+    "width": 134,
+    "height": 134
+  }
+}

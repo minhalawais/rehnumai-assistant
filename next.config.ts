@@ -1,9 +1,17 @@
 import type { NextConfig } from "next";
 
+const STATIC_MEDIA = ["/fonts/:path*", "/menu-icons/:path*", "/guide/:path*", "/brand/:path*", "/support/:path*"];
+
 const nextConfig: NextConfig = {
   /* config options here */
   output: "standalone",
   allowedDevOrigins: ["127.0.0.1"],
+  images: {
+    formats: ["image/avif", "image/webp"],
+    imageSizes: [48, 64, 96, 128, 256],
+    deviceSizes: [384, 640, 750, 828, 1080, 1200],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+  },
   async headers() {
     return [
       {
@@ -22,6 +30,10 @@ const nextConfig: NextConfig = {
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
         ],
       },
+      ...STATIC_MEDIA.map((source) => ({
+        source,
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      })),
     ];
   },
   turbopack: {
