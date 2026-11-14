@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, CircleHelp, Home, Landmark, MessageSquareWarning } from "lucide-react";
+import { ManzilLogo } from "@/components/brand";
 import { ContentImage } from "@/components/content-image";
 import { copy, LanguageSwitch, useLocale } from "@/components/locale";
 import { PartnerLogos } from "@/components/partner-logos";
@@ -56,8 +57,8 @@ export function ManzilMainMenu() {
             <ContentImage src="/menu-icons/header-bg-v2.jpg" alt="" preset="cover" priority />
           </div>
           <div className="manzil-menu__welcome-copy">
-            <h1 id="manzil-menu-title" className="manzil-menu__welcome-title">Manzil</h1>
-            <p className="manzil-menu__welcome-sub">{MANZIL_APP_TAGLINE_EN}</p>
+            <h1 id="manzil-menu-title" className="sr-only">Manzil — {MANZIL_APP_TAGLINE_EN}</h1>
+            <ManzilLogo size={112} className="manzil-menu__welcome-logo" priority decorative />
             <p className={`manzil-menu__welcome-tag${language === "ur" ? " urdu" : ""}`} lang={language}>
               {copy(language, "A clearer path to a safer journey.", "\u0645\u062d\u0641\u0648\u0638 \u0633\u0641\u0631 \u06a9\u06cc \u0637\u0631\u0641 \u0627\u06cc\u06a9 \u0648\u0627\u0636\u062d \u0631\u0627\u0633\u062a\u06c1\u06d4")}
             </p>

@@ -8,6 +8,9 @@ export type GuideBlock =
   | { type: "p"; text: string }
   | { type: "h"; text: string }
   | { type: "list"; items: string[]; variant?: "warning" | "info" }
+  | { type: "document-list"; items: string[] }
+  | { type: "yellow-note"; title: string; body: string }
+  | { type: "neutral-note"; text: string; url: string }
   | { type: "portals"; items: GuidePortal[] }
   | { type: "callout"; title: string; url: string }
   | { type: "org-cards"; title?: string; compact?: boolean; items: GuideOrgCard[] }
@@ -35,6 +38,7 @@ export type GuideBlock =
       type: "respect-laws-guide";
       intro: string;
       images: string[];
+      executionImage?: string;
       tableTitle: string;
       columns: { title: string; text: string }[];
     }

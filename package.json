@@ -13,6 +13,7 @@
     "postinstall": "node scripts/copy-pdf-worker.mjs",
     "images:downscale": "node scripts/downscale-rasters.mjs",
     "images:meta": "node scripts/build-image-meta.mjs",
+    "brand:assets": "node scripts/build-manzil-logo-assets.mjs",
     "test:booklet-index": "node scripts/verify-booklet-index.mjs",
     "test:booklet-index:e2e": "node scripts/e2e-booklet-index.mjs",
     "test:booklet-pdf:e2e": "node scripts/e2e-booklet-pdf.mjs",

@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { ManzilLogo } from "@/components/brand";
 import { copy, useLocale } from "@/components/locale";
 import { PartnerLogos } from "@/components/partner-logos";
 import {
-  MANZIL_APP_TAGLINE_EN,
-  MANZIL_APP_NAME_UR,
+  MANZIL_APP_NAME_EN,
   MANZIL_INTRO_HIGHLIGHTS,
   MANZIL_INTRO_PARAGRAPHS_UR,
 } from "@/lib/manzil-intro-copy";
@@ -107,27 +106,10 @@ export function AppIntro({ onComplete }: AppIntroProps) {
 }
 
 function ManzilIntroBrand({ id }: { id?: string }) {
-  const { language } = useLocale();
   return (
     <div className="app-intro__brand-strip app-intro__brand-strip--stacked" dir="ltr">
-      <div className="app-intro__logo-frame app-intro__logo-frame--stacked">
-        <Image
-          src="/brand/manzil_logo.jpeg"
-          alt=""
-          width={512}
-          height={512}
-          className="app-intro__logo"
-          priority
-          sizes="(max-width: 700px) 120px, 140px"
-        />
-      </div>
-      <div className="app-intro__brand-copy">
-        <p className="app-intro__title-mark" id={id}>
-          Manzil
-        </p>
-        <p className="app-intro__title-sub">{MANZIL_APP_TAGLINE_EN}</p>
-        {language === "ur" && <p className="app-intro__title-ur">{MANZIL_APP_NAME_UR}</p>}
-      </div>
+      <ManzilLogo size={140} className="app-intro__logo" priority decorative />
+      <span className="sr-only" id={id}>{MANZIL_APP_NAME_EN}</span>
     </div>
   );
 }

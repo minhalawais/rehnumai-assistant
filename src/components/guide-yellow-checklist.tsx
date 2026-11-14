@@ -1,10 +1,13 @@
 import { ContentImage } from "@/components/content-image";
 
-function StepCheck() {
+function StepCheck({ index }: { index: number }) {
   return (
-    <span className="guide__airport-step-box" aria-hidden>
-      <span className="guide__airport-step-tick">✓</span>
-    </span>
+    <label className="guide__airport-step-control">
+      <input className="guide__airport-step-input" type="checkbox" aria-label={`مکمل — ${index + 1}`} />
+      <span className="guide__airport-step-box" aria-hidden>
+        <span className="guide__airport-step-tick">✓</span>
+      </span>
+    </label>
   );
 }
 
@@ -23,12 +26,12 @@ export function GuideYellowChecklist({
         {banner}
       </h2>
       <ol className="guide__airport-steps">
-        {items.map((line) => (
+        {items.map((line, index) => (
           <li key={line} className="guide__airport-step">
             <span className="guide__airport-step-text urdu" dir="rtl">
               {line}
             </span>
-            <StepCheck />
+            <StepCheck index={index} />
           </li>
         ))}
       </ol>

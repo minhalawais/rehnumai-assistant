@@ -39,17 +39,24 @@ export default function GuidePage() {
   return (
     <ManzilMenuFrame>
       <article
-        className={`guide${id === "self-check" ? " guide--self-check" : ""}${id === "departure-requirements" ? " guide--departure-requirements" : ""}${id === "checklist" ? " guide--packing-checklist" : ""}${id === "airport" ? " guide--airport" : ""}${id === "employer" ? " guide--employer" : ""}${id === "arrival-airport" ? " guide--arrival-airport" : ""}${id === "job-search" ? " guide--job-search" : ""}${id === "respect-laws" ? " guide--respect-laws" : ""}${id === "rights" ? " guide--rights" : ""}${id === "workplace-rights" ? " guide--workplace-rights" : ""}${id === "smartphone" ? " guide--smartphone" : ""}${id === "remittance-channels" ? " guide--remittance" : ""}${id === "formal-informal" ? " guide--formal-informal" : ""}${id === "private-companies" ? " guide--private-companies" : ""}${id === "reintegration" ? " guide--reintegration" : ""}${id === "return-support" ? " guide--return-support" : ""}${id === "psychological" ? " guide--psychological" : ""}${id === "dunki" ? " guide--dunki" : ""}${id === "legal-vs-illegal" ? " guide--legal-vs-illegal" : ""}`}
+        className={`guide${id === "self-check" ? " guide--self-check" : ""}${id === "documents" ? " guide--documents" : ""}${id === "cv-mistakes" ? " guide--cv-mistakes" : ""}${id === "departure-requirements" ? " guide--departure-requirements" : ""}${id === "checklist" ? " guide--packing-checklist" : ""}${id === "airport" ? " guide--airport" : ""}${id === "employer" ? " guide--employer" : ""}${id === "arrival-airport" ? " guide--arrival-airport" : ""}${id === "job-search" ? " guide--job-search" : ""}${id === "respect-laws" ? " guide--respect-laws" : ""}${id === "rights" ? " guide--rights" : ""}${id === "workplace-rights" ? " guide--workplace-rights" : ""}${id === "smartphone" ? " guide--smartphone" : ""}${id === "remittance-channels" ? " guide--remittance" : ""}${id === "formal-informal" ? " guide--formal-informal" : ""}${id === "private-companies" ? " guide--private-companies" : ""}${id === "reintegration" ? " guide--reintegration" : ""}${id === "return-support" ? " guide--return-support" : ""}${id === "psychological" ? " guide--psychological" : ""}${id === "dunki" ? " guide--dunki" : ""}${id === "legal-vs-illegal" ? " guide--legal-vs-illegal" : ""}`}
       >
         <Link href={`/menu/${entry.section.id}`} className="manzil-menu__back focus-ring">
           {language === "ur" ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
           <span className="urdu">{copy(language, entry.section.titleEn, entry.section.titleUr)}</span>
         </Link>
-        <div className={`guide__intro${id === "women" ? " guide__intro--text-only" : ""}`}>
+        <div className="guide__intro">
           <div className="guide__intro-copy">
             <h1 className="guide__title urdu">{copy(language, entry.item.titleEn, entry.item.titleUr)}</h1>
           </div>
-          {id !== "women" ? <ContentImage src={`/menu-icons/guide/${id}-photo.jpg`} alt="" preset="icon" className="guide__icon" /> : null}
+          {
+            <ContentImage
+              src={id === "skills-review" ? "/guide/image18.png" : id === "women" ? "/guide/image26.png" : id === "respect-laws" ? "/guide/image62-photo.jpeg" : id === "reminders" ? "/guide/image86.png" : `/menu-icons/guide/${id}-photo.jpg`}
+              alt=""
+              preset="icon"
+              className={`guide__icon${id === "skills-review" || id === "women" || id === "respect-laws" || id === "reminders" ? " guide__icon--contained" : ""}`}
+            />
+          }
         </div>
         <GuideSheet blocks={blocks} />
         <Link href={forwardLink.href} className="guide__next btn-primary focus-ring">

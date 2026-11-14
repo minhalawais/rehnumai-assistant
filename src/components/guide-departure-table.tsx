@@ -110,9 +110,14 @@ export function GuideDepartureTable({ rows }: { rows: string[][] }) {
                   }
                   return (
                     <td key={key} className="guide__checklist-td guide__checklist-td--tick">
-                      <span className="guide__departure-check" aria-hidden>
-                        ✓
-                      </span>
+                      <label className="guide__departure-check-control">
+                        <input
+                          className="guide__departure-check-input"
+                          type="checkbox"
+                          aria-label={`تصدیق — ${row.num}`}
+                        />
+                        <span className="guide__departure-check" aria-hidden>✓</span>
+                      </label>
                     </td>
                   );
                 })}

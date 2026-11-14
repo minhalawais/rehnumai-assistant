@@ -49,8 +49,10 @@ export function GuideFormalInformal({ rows }: { rows: string[][] }) {
             className={informal ? "guide__fi-channel guide__fi-channel--informal" : "guide__fi-channel guide__fi-channel--formal"}
           >
             <header className="guide__fi-channel-head">
-              <p className="guide__fi-channel-kicker urdu">ذرائع</p>
-              <h2 className="guide__fi-channel-title urdu">{source}</h2>
+              <h2 className="guide__fi-channel-title urdu">
+                <span className="guide__fi-channel-title-text">{source}</span>
+                <span className="guide__fi-channel-kicker urdu">ذرائع</span>
+              </h2>
             </header>
             <div className="guide__fi-channel-body">
               <FiSection title={disadvantage} tone="risk" text={row[0] ?? ""} />

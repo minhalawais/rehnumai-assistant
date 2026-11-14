@@ -49,8 +49,8 @@ export function GuideSaudiApps({
       </h2>
 
       <div className="guide__apps-mobile" dir="rtl">
-        {apps.map((app) => (
-          <article key={app.name} className="guide__apps-mobile-row">
+        {apps.map((app, index) => (
+          <article key={app.name} className={`guide__apps-mobile-row guide__apps-app--tone-${index % 6}`}>
             <div className="guide__apps-mobile-split">
               <div className="guide__apps-mobile-logo-cell">
                 <AppLogo name={app.name} logo={app.logo} />
@@ -61,7 +61,6 @@ export function GuideSaudiApps({
               </div>
             </div>
             <div className="guide__apps-mobile-benefits-cell">
-              <p className="guide__apps-cell-label urdu">فوائد</p>
               <BenefitsList items={app.benefits} />
             </div>
           </article>
@@ -78,14 +77,12 @@ export function GuideSaudiApps({
               <th scope="col" className="guide__apps-th urdu">
                 مقصد
               </th>
-              <th scope="col" className="guide__apps-th urdu">
-                فوائد
-              </th>
+              <th scope="col" className="guide__apps-th guide__apps-th--benefits" aria-hidden="true" />
             </tr>
           </thead>
           <tbody>
-            {apps.map((app) => (
-              <tr key={app.name}>
+            {apps.map((app, index) => (
+              <tr key={app.name} className={`guide__apps-app--tone-${index % 6}`}>
                 <td className="guide__apps-td guide__apps-td--logo">
                   <AppLogo name={app.name} logo={app.logo} />
                 </td>

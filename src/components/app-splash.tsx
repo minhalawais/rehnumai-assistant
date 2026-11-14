@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
-import { MANZIL_APP_NAME_EN, MANZIL_APP_TAGLINE_EN } from "@/lib/manzil-intro-copy";
+import { ManzilLogo } from "@/components/brand";
+import { MANZIL_APP_NAME_EN } from "@/lib/manzil-intro-copy";
 
 const MIN_VISIBLE_MS = 2000;
 const EXIT_MS = 450;
@@ -55,21 +55,8 @@ export function AppSplash({ onComplete }: AppSplashProps) {
     >
       <div className="app-splash__glow" aria-hidden="true" />
       <div className="app-splash__content app-splash__content--brief">
-        <div className="app-splash__logo-frame">
-          <Image
-            src="/brand/manzil_logo.jpeg"
-            alt=""
-            width={640}
-            height={640}
-            className="app-splash__logo"
-            priority
-            sizes="(max-width: 700px) 140px, 180px"
-          />
-        </div>
-        <h1 className="app-splash__title" dir="ltr">
-          <span className="app-splash__title-brand">Manzil</span>
-          <span className="app-splash__title-rest">{MANZIL_APP_TAGLINE_EN}</span>
-        </h1>
+        <ManzilLogo size={176} className="app-splash__logo" priority decorative />
+        <h1 className="sr-only">{MANZIL_APP_NAME_EN}</h1>
         <div className="app-splash__progress" aria-hidden="true">
           <span className="app-splash__progress-bar" />
         </div>

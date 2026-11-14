@@ -51,9 +51,19 @@ export function GuideChecklist({ head, rows }: { head: string[]; rows: string[][
               <tr key={rowIndex}>
                 {order.map((cellIndex) => {
                   if (cellIndex === cols.yes || cellIndex === cols.no) {
+                    const answer = cellIndex === cols.yes ? "yes" : "no";
                     return (
                       <td key={cellIndex} className={tdClass(cellIndex)}>
-                        <span className="guide__check-box" aria-hidden />
+                        <label className="guide__check-control">
+                          <input
+                            className="guide__check-input"
+                            type="radio"
+                            name={`checklist-row-${rowIndex}`}
+                            value={answer}
+                            aria-label={`${head[cellIndex]?.replace(/\n/g, " ").trim()} — ${rowIndex + 1}`}
+                          />
+                          <span className="guide__check-box" aria-hidden />
+                        </label>
                       </td>
                     );
                   }
@@ -76,3 +86,4 @@ export function GuideChecklist({ head, rows }: { head: string[]; rows: string[][
     </section>
   );
 }
+

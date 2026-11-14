@@ -1,6 +1,8 @@
 import type { GuideBlock, GuideOrgCard, GuidePortal } from "@/lib/guide-articles";
+import { TriangleAlert } from "lucide-react";
 import { GuideChecklist } from "@/components/guide-checklist";
 import { GuideDepartureTable } from "@/components/guide-departure-table";
+import { GuideDocumentList } from "@/components/guide-document-list";
 import { GuidePackingChecklist } from "@/components/guide-packing-checklist";
 import { GuideAirportGuide } from "@/components/guide-airport-guide";
 import { GuideArrivalAirport } from "@/components/guide-arrival-airport";
@@ -14,6 +16,8 @@ import { GuideFormalInformal, isFormalInformalCompare } from "@/components/guide
 import { GuidePrivateCompanies } from "@/components/guide-private-companies";
 import { GuideReintegration } from "@/components/guide-reintegration";
 import { GuideFactorGrid } from "@/components/guide-factor-grid";
+import { GuideYellowNote } from "@/components/guide-yellow-note";
+import { GuideNeutralNote } from "@/components/guide-neutral-note";
 import type { EmployerGridCell } from "@/components/guide-employer-grid";
 import { ContentImage } from "@/components/content-image";
 import { LinkText } from "@/components/guide-link-text";
@@ -514,12 +518,22 @@ export function GuideSheet({ blocks }: { blocks: GuideBlock[] }) {
         if (block.type === "factor-grid") {
           return <GuideFactorGrid key={index} intro={block.intro} items={block.items} />;
         }
+        if (block.type === "document-list") {
+          return <GuideDocumentList key={index} items={block.items} />;
+        }
+        if (block.type === "yellow-note") {
+          return <GuideYellowNote key={index} title={block.title} body={block.body} />;
+        }
+        if (block.type === "neutral-note") {
+          return <GuideNeutralNote key={index} text={block.text} url={block.url} />;
+        }
         if (block.type === "respect-laws-guide") {
           return (
             <GuideRespectLaws
               key={index}
               intro={block.intro}
               images={block.images}
+              executionImage={block.executionImage}
               tableTitle={block.tableTitle}
               columns={block.columns}
             />
@@ -587,12 +601,19 @@ export function GuideSheet({ blocks }: { blocks: GuideBlock[] }) {
                     : "guide__list"
               }
             >
-              {block.items.map((item, itemIndex) => (
-                <li key={itemIndex} className="guide__item urdu">
-                  <span className="guide__point-mark" aria-hidden />
-                  <span><LinkText text={item} /></span>
-                </li>
-              ))}
+              {block.items.map((item, itemIndex) => {
+                const isLtrResource = /https?:\/\//i.test(item) && !/[\u0600-\u06ff]/.test(item);
+                return (
+                  <li
+                    key={itemIndex}
+                    className={isLtrResource ? "guide__item guide__item--ltr" : "guide__item urdu"}
+                    dir={isLtrResource ? "ltr" : undefined}
+                  >
+                    <span className="guide__point-mark" aria-hidden />
+                    <span><LinkText text={item} /></span>
+                  </li>
+                );
+              })}
             </ul>
           );
         }
@@ -600,7 +621,14 @@ export function GuideSheet({ blocks }: { blocks: GuideBlock[] }) {
           const disclaimer = isDisclaimer(chunk);
           return (
             <div key={`${index}-${chunkIndex}`} className={disclaimer ? "guide__disclaimer urdu" : "guide__p urdu"} role={disclaimer ? "note" : undefined}>
-              {disclaimer ? <DisclaimerText text={chunk} /> : <LinkText text={chunk} />}
+              {disclaimer ? (
+                <>
+                  <span className="guide__disclaimer-icon" aria-hidden>
+                    <TriangleAlert size={22} strokeWidth={2.2} />
+                  </span>
+                  <span className="guide__disclaimer-copy"><DisclaimerText text={chunk} /></span>
+                </>
+              ) : <LinkText text={chunk} />}
             </div>
           );
         });

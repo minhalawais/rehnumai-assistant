@@ -1,15 +1,18 @@
 import { ContentImage } from "@/components/content-image";
+import { GuideExecutionCard } from "@/components/guide-execution-card";
 
 export type RespectLawsColumn = { title: string; text: string };
 
 export function GuideRespectLaws({
   intro,
   images,
+  executionImage,
   tableTitle,
   columns,
 }: {
   intro: string;
   images: string[];
+  executionImage?: string;
   tableTitle: string;
   columns: RespectLawsColumn[];
 }) {
@@ -30,6 +33,7 @@ export function GuideRespectLaws({
           <ContentImage src={src} alt="" preset="figure" />
         </figure>
       ))}
+      {executionImage ? <GuideExecutionCard /> : null}
       <div className="guide__instructions-block">
         <h2 className="guide__instructions-title urdu" dir="rtl">
           {tableTitle}
