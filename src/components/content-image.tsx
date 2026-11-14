@@ -53,6 +53,7 @@ export function ContentImage({ src, alt, preset = "figure", sizes, className, pr
       sizes={sizes ?? PRESET_SIZES[preset]}
       className={className}
       onError={onError}
+      unoptimized={preset === "logo"}
       {...(priority ? { priority: true } : { loading: "lazy" as const })}
     />
   );

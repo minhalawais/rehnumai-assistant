@@ -8,6 +8,21 @@ import { MANZIL_FAQ_SOURCES, MANZIL_FAQS, type ManzilFaq } from "@/lib/manzil-fa
 
 const WIDE_QUERY = "(min-width: 960px)";
 
+type FaqTopic = "all" | "travel" | "rights" | "complaints";
+
+const FAQ_TOPICS: Array<{ id: FaqTopic; labelEn: string; labelUr: string }> = [
+  { id: "all", labelEn: "All", labelUr: "تمام" },
+  { id: "travel", labelEn: "Safe travel", labelUr: "محفوظ سفر" },
+  { id: "rights", labelEn: "Rights", labelUr: "حقوق" },
+  { id: "complaints", labelEn: "Complaints", labelUr: "شکایات" },
+];
+
+const FAQ_TOPIC_ITEMS: Record<Exclude<FaqTopic, "all">, string[]> = {
+  travel: ["safer-departure", "training-enrolment", "rules-info"],
+  rights: ["worker-rights", "return-support", "exploitation", "financial-help"],
+  complaints: ["exploitation", "complain-pakistan", "complain-abroad"],
+};
+
 function useWideLayout() {
   const [wide, setWide] = useState(false);
 
@@ -20,10 +35,6 @@ function useWideLayout() {
   }, []);
 
   return wide;
-}
-
-function faqNumber(index: number) {
-  return String(index + 1);
 }
 
 function FaqAnswer({ item, language, restated }: { item: ManzilFaq; language: Language; restated?: boolean }) {
@@ -55,15 +66,23 @@ export function FaqPage() {
   const { language } = useLocale();
   const wide = useWideLayout();
   const [openId, setOpenId] = useState(MANZIL_FAQS[0]?.id ?? "");
-
-  useEffect(() => {
-    if (wide && !openId) setOpenId(MANZIL_FAQS[0]?.id ?? "");
-  }, [wide, openId]);
+  const [activeTopic, setActiveTopic] = useState<FaqTopic>("all");
 
   const choose = (id: string) => {
     setOpenId((current) => (wide || current !== id ? id : ""));
   };
-  const selectedFaq = MANZIL_FAQS.find((item) => item.id === openId);
+  const visibleFaqs = activeTopic === "all"
+    ? MANZIL_FAQS
+    : MANZIL_FAQS.filter((item) => FAQ_TOPIC_ITEMS[activeTopic].includes(item.id));
+  const selectedFaq = visibleFaqs.find((item) => item.id === openId);
+
+  const chooseTopic = (topic: FaqTopic) => {
+    const nextFaqs = topic === "all"
+      ? MANZIL_FAQS
+      : MANZIL_FAQS.filter((item) => FAQ_TOPIC_ITEMS[topic].includes(item.id));
+    setActiveTopic(topic);
+    if (!nextFaqs.some((item) => item.id === openId)) setOpenId(nextFaqs[0]?.id ?? "");
+  };
 
   return (
     <ManzilMenuFrame>
@@ -79,9 +98,23 @@ export function FaqPage() {
           </p>
         </header>
 
+        <div className="faq-page__topics" role="toolbar" aria-label={copy(language, "FAQ topics", "سوالات کے موضوعات")}>
+          {FAQ_TOPICS.map((topic) => (
+            <button
+              key={topic.id}
+              type="button"
+              className={`faq-topic focus-ring${activeTopic === topic.id ? " faq-topic--active" : ""}`}
+              aria-pressed={activeTopic === topic.id}
+              onClick={() => chooseTopic(topic.id)}
+            >
+              <span className="urdu">{copy(language, topic.labelEn, topic.labelUr)}</span>
+            </button>
+          ))}
+        </div>
+
         <div className="faq-page__layout">
           <div className="faq-page__index">
-            {MANZIL_FAQS.map((item, index) => {
+            {visibleFaqs.map((item) => {
               const open = item.id === openId;
               const panelId = `faq-panel-${item.id}`;
               const buttonId = `faq-button-${item.id}`;
@@ -96,7 +129,6 @@ export function FaqPage() {
                       aria-controls={wide ? "faq-stage" : panelId}
                       onClick={() => choose(item.id)}
                     >
-                      <span className="faq-item__num" dir="ltr">{faqNumber(index)}</span>
                       <span className="faq-item__q urdu">{copy(language, item.questionEn, item.questionUr)}</span>
                       <ChevronDown className="faq-item__chevron" size={18} aria-hidden />
                     </button>

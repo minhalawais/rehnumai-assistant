@@ -623,9 +623,17 @@
     "width": 1152,
     "height": 864
   },
+  "/menu-icons/support-government-v2.jpg": {
+    "width": 1280,
+    "height": 853
+  },
   "/menu-icons/support-government.jpg": {
     "width": 1280,
     "height": 720
+  },
+  "/menu-icons/support-international-v2.jpg": {
+    "width": 1280,
+    "height": 853
   },
   "/menu-icons/support-international.jpg": {
     "width": 1280,

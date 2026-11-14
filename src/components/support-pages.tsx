@@ -29,8 +29,22 @@ function readableParagraphs(text: string): string[] {
   return chunks;
 }
 
-const HUB_COUNT = { government: ["10 bodies", "۱۰ ادارے"], international: ["3 bodies", "۳ ادارے"] } as const;
-const HUB_ART = { government: "/menu-icons/support-government.jpg", international: "/menu-icons/support-international.jpg" } as const;
+const HUB_ART = {
+  government: "/menu-icons/support-government-v2.jpg",
+  international: "/menu-icons/support-international-v2.jpg",
+} as const;
+
+const HUB_LOGOS = {
+  government: [
+    "/support/image114.png",
+    "/puwf_logo.png",
+    "/support/image116.png",
+    "/support/image118.png",
+    "/support/image120.png",
+    "/support/image122.png",
+  ],
+  international: ["/support/image125.png", "/support/image126.jpeg", "/support/iom-pakistan.svg"],
+} as const;
 
 export function SupportHub() {
   const { language } = useLocale();
@@ -41,17 +55,21 @@ export function SupportHub() {
         <h1 className="guide__title urdu">{copy(language, "Helpful official bodies", "مددگار سرکاری ادارے")}</h1>
         <div className="support-hub__cards">
           {SUPPORT_GROUPS.map((group) => {
-            const count = HUB_COUNT[group.id as keyof typeof HUB_COUNT];
             const art = HUB_ART[group.id as keyof typeof HUB_ART];
+            const logos = HUB_LOGOS[group.id as keyof typeof HUB_LOGOS];
             return (
               <Link key={group.id} href={`/support/${group.id}`} className={`support-hub__card support-hub__card--${group.id} focus-ring`}>
                 <span className="support-hub__frame">
                   <ContentImage src={art} alt="" preset="cover" className="support-hub__scene" />
+                  <span className="support-hub__logos" aria-hidden="true">
+                    {logos.map((logo) => (
+                      <ContentImage key={logo} src={logo} alt="" preset="logo" sizes="64px" className="support-hub__logo" />
+                    ))}
+                  </span>
                 </span>
                 <span className="support-hub__copy">
                   <span className="support-hub__text">
                     <span className="support-hub__title urdu">{copy(language, group.titleEn, group.titleUr)}</span>
-                    <span className="support-hub__count urdu">{copy(language, count[0], count[1])}</span>
                   </span>
                   {language === "ur" ? <ChevronLeft size={22} aria-hidden /> : <ChevronRight size={22} aria-hidden />}
                 </span>

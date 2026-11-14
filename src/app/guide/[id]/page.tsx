@@ -18,6 +18,24 @@ export default function GuidePage() {
   const blocks = GUIDE_ARTICLES[id];
   if (!entry || !blocks?.length) notFound();
 
+  const forwardLink = entry.next
+    ? {
+        href: `/guide/${entry.next.id}`,
+        labelEn: entry.next.titleEn,
+        labelUr: entry.next.titleUr,
+      }
+    : entry.nextSection
+      ? {
+          href: `/menu/${entry.nextSection.id}`,
+          labelEn: `Next module: ${entry.nextSection.titleEn}`,
+          labelUr: `اگلا ماڈیول: ${entry.nextSection.titleUr}`,
+        }
+      : {
+          href: "/",
+          labelEn: "Back to main menu",
+          labelUr: "مرکزی مینیو پر واپس جائیں",
+        };
+
   return (
     <ManzilMenuFrame>
       <article
@@ -34,12 +52,10 @@ export default function GuidePage() {
           {id !== "women" ? <ContentImage src={`/menu-icons/guide/${id}-photo.jpg`} alt="" preset="icon" className="guide__icon" /> : null}
         </div>
         <GuideSheet blocks={blocks} />
-        {entry.next ? (
-          <Link href={`/guide/${entry.next.id}`} className="guide__next btn-primary focus-ring">
-            <span className="urdu">{copy(language, entry.next.titleEn, entry.next.titleUr)}</span>
-            {language === "ur" ? <ArrowLeft size={16} aria-hidden /> : <ArrowRight size={16} aria-hidden />}
-          </Link>
-        ) : null}
+        <Link href={forwardLink.href} className="guide__next btn-primary focus-ring">
+          <span className="urdu">{copy(language, forwardLink.labelEn, forwardLink.labelUr)}</span>
+          {language === "ur" ? <ArrowLeft size={16} aria-hidden /> : <ArrowRight size={16} aria-hidden />}
+        </Link>
       </article>
     </ManzilMenuFrame>
   );

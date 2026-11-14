@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { GUIDE_ARTICLES } from "@/lib/guide-articles";
-import { MANZIL_MENU_SECTIONS } from "@/lib/manzil-menu-items";
+import { findManzilIndex, MANZIL_MENU_SECTIONS } from "@/lib/manzil-menu-items";
 
 describe("Manzil guide registry", () => {
   it("provides content for every guide link in the menu", () => {
@@ -11,6 +11,17 @@ describe("Manzil guide registry", () => {
     const missing = guideIds.filter((id) => !GUIDE_ARTICLES[id]?.length);
 
     expect(missing).toEqual([]);
+  });
+
+  it("connects the last guide in each module to the next module", () => {
+    for (const [sectionIndex, section] of MANZIL_MENU_SECTIONS.entries()) {
+      const items = section.groups.flatMap((group) => group.items);
+      const lastItem = items[items.length - 1];
+      const entry = findManzilIndex(lastItem.id);
+
+      expect(entry?.next).toBeUndefined();
+      expect(entry?.nextSection?.id).toBe(MANZIL_MENU_SECTIONS[sectionIndex + 1]?.id);
+    }
   });
 
   it("keeps recovered guide pages connected to their specialized layouts", () => {

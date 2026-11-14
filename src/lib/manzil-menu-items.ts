@@ -140,7 +140,7 @@ export function getManzilMenuSection(id: string) {
 }
 
 export function findManzilIndex(id: string) {
-  for (const section of MANZIL_MENU_SECTIONS) {
+  for (const [sectionIndex, section] of MANZIL_MENU_SECTIONS.entries()) {
     const items = section.groups.flatMap((group) => group.items.map((item) => ({ group, item })));
     const index = items.findIndex((entry) => entry.item.id === id);
     if (index >= 0) {
@@ -150,6 +150,7 @@ export function findManzilIndex(id: string) {
         item: items[index].item,
         prev: items[index - 1]?.item,
         next: items[index + 1]?.item,
+        nextSection: MANZIL_MENU_SECTIONS[sectionIndex + 1],
       };
     }
   }
