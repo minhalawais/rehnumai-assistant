@@ -1212,6 +1212,24 @@ body.app-splash-lock,body.app-launch-lock { overflow:hidden; }
 @media(min-width:960px) {
   .guide__checklist-td--doc { font-size:16px; line-height:1.55; }
 }
+.guide--psychological .guide__sheet { padding:12px 10px 18px; }
+.guide__factors { display:flex; flex-direction:column; gap:12px; margin:0; }
+.guide__factors-intro { margin:0; color:#071828; font-size:13px; font-weight:650; line-height:1.65; text-align:start; }
+.guide__factors-grid { display:grid; grid-template-columns:1fr; gap:10px; margin:0; padding:0; list-style:none; }
+.guide__factor { padding:12px 14px 14px; border:1px solid #d5e3ec; border-radius:14px; background:#fff; }
+.guide__factor-title { margin:0 0 8px; padding-bottom:8px; border-bottom:1px solid #e8f0f6; color:#0e4f86; font-size:15px; font-weight:800; line-height:1.5; text-align:start; }
+.guide__factor-text { margin:0; color:#18313b; font-size:13px; font-weight:600; line-height:1.62; text-align:start; }
+@media(min-width:560px) {
+  .guide__factors-grid { grid-template-columns:1fr 1fr; }
+  .guide__factors-intro { font-size:14px; }
+  .guide__factor { padding:14px 16px 16px; }
+  .guide__factor-title { font-size:16px; }
+  .guide__factor-text { font-size:14px; }
+}
+@media(min-width:560px) {
+  .guide__compare .guide__stacked { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .guide__compare .guide__stack { margin:0; }
+}
 .guide__compare .guide__table-wrap { display:none; }
 .guide__table-wrap { margin:0 0 16px; overflow-x:auto; border:1px solid #d3e2ee; border-radius:12px; }
 .guide__table { width:100%; border-collapse:collapse; }
@@ -1221,9 +1239,8 @@ body.app-splash-lock,body.app-launch-lock { overflow:hidden; }
 .guide__table th.tone-risk, .guide__table td.tone-risk { background:#fdf6f4; }
 .guide__table tr:last-child td { border-bottom:0; }
 @media(min-width:800px) {
-  .guide__compare .guide__stacked { display:none; }
-  .guide__compare .guide__table-wrap { display:block; overflow:visible; }
-  .guide__table th { position:sticky; top:0; z-index:1; }
+  .guide__compare .guide__stacked { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .guide__compare .guide__table-wrap { display:none; }
 }
 @media(min-width:960px) {
   .guide { gap:16px; width:min(100%,840px); }

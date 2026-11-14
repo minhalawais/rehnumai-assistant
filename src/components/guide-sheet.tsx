@@ -13,6 +13,7 @@ import { GuideRemittanceChannels } from "@/components/guide-remittance-channels"
 import { GuideFormalInformal, isFormalInformalCompare } from "@/components/guide-formal-informal";
 import { GuidePrivateCompanies } from "@/components/guide-private-companies";
 import { GuideReintegration } from "@/components/guide-reintegration";
+import { GuideFactorGrid } from "@/components/guide-factor-grid";
 import type { EmployerGridCell } from "@/components/guide-employer-grid";
 import { ContentImage } from "@/components/content-image";
 import { LinkText } from "@/components/guide-link-text";
@@ -158,6 +159,7 @@ function phoneLayout(rows: string[][]): "columns" | "rows" {
   const data = head ? body : rows;
   const cols = rows.reduce((max, row) => Math.max(max, row.length), 0);
   if (data.length === 1 && cols <= 3) return "columns";
+  if (!head && cols === 2) return "columns";
   return "rows";
 }
 
@@ -508,6 +510,9 @@ export function GuideSheet({ blocks }: { blocks: GuideBlock[] }) {
               steps={block.steps}
             />
           );
+        }
+        if (block.type === "factor-grid") {
+          return <GuideFactorGrid key={index} intro={block.intro} items={block.items} />;
         }
         if (block.type === "respect-laws-guide") {
           return (

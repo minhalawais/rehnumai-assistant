@@ -13,6 +13,7 @@ export type GuideBlock =
   | { type: "org-cards"; title?: string; compact?: boolean; items: GuideOrgCard[] }
   | { type: "img"; src: string; alt: string; display?: "content" | "compact" }
   | { type: "table"; rows: string[][] }
+  | { type: "factor-grid"; intro?: string; items: { title: string; text: string }[] }
   | { type: "dual-checklist"; leftTitle: string; rightTitle: string; left: string[]; right: string[] }
   | {
       type: "airport-guide";
