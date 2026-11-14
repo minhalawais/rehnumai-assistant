@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ContentImage } from "@/components/content-image";
 import { copy, useLocale } from "@/components/locale";
 import { ManzilMenuFrame } from "@/components/manzil-main-menu";
 import { getManzilMenuSection } from "@/lib/manzil-menu-items";
@@ -16,7 +17,7 @@ export function ManzilSectionMenu({ sectionId }: { sectionId: string }) {
     <ManzilMenuFrame>
       <div className="manzil-menu__section-page">
         <header className={`manzil-index__hero manzil-index__hero--${section.id}`}>
-          <img src={section.icon} alt="" />
+          <ContentImage src={section.icon} alt="" preset="cover" sizes="(max-width: 959px) 100vw, 920px" />
           <Link href="/" className="manzil-menu__back manzil-index__back focus-ring">
             {language === "ur" ? <ArrowRight size={16} aria-hidden /> : <ArrowLeft size={16} aria-hidden />}
             <span className="urdu">{copy(language, "Back", "واپس")}</span>
@@ -26,7 +27,7 @@ export function ManzilSectionMenu({ sectionId }: { sectionId: string }) {
         <div className="manzil-index">
           {section.groups.map((group) => {
             const groupTitle = copy(language, group.titleEn, group.titleUr);
-            const showLabel = section.groups.length > 1 || groupTitle !== copy(language, section.titleEn, section.titleUr);
+            const showLabel = groupTitle !== copy(language, section.titleEn, section.titleUr);
             return (
               <section key={group.id} className="manzil-index__group" aria-labelledby={`manzil-index-${group.id}`}>
                 {showLabel ? (

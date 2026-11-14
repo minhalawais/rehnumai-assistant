@@ -2,7 +2,7 @@ import Image from "next/image";
 import { MANZIL_APP_NAME_EN, MANZIL_APP_TAGLINE_EN } from "@/lib/manzil-intro-copy";
 
 export function BrandMark({ size = 40, className = "" }: { size?: number; className?: string }) {
-  return <Image src="/brand/manzil-mark-512.png" alt={MANZIL_APP_NAME_EN} width={size} height={size} className={`object-contain ${className}`} priority />;
+  return <Image src="/brand/manzil-mark-128.png" alt={MANZIL_APP_NAME_EN} width={size} height={size} className={`object-contain ${className}`} />;
 }
 
 export function BrandLockup({ compact = false, className = "" }: { compact?: boolean; className?: string }) {

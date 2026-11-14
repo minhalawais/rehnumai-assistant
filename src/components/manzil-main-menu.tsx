@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, CircleHelp, Home, Landmark, MessageSquareWarning } from "lucide-react";
+import { ContentImage } from "@/components/content-image";
 import { copy, LanguageSwitch, useLocale } from "@/components/locale";
 import { PartnerLogos } from "@/components/partner-logos";
 import { MANZIL_MENU_DOCK, MANZIL_MENU_SECTIONS } from "@/lib/manzil-menu-items";
@@ -30,7 +31,12 @@ export function ManzilMenuFrame({ children }: { children: React.ReactNode }) {
       <nav className="manzil-menu__dock" aria-label={copy(language, "Main navigation", "\u0645\u0631\u06a9\u0632\u06cc \u0646\u06cc\u0648\u06cc\u06af\u06cc\u0634\u0646")}>
         {MANZIL_MENU_DOCK.map((item) => {
           const DockIcon = dockIcons[item.icon];
-          const active = item.href === "/" ? pathname === "/" || pathname.startsWith("/menu") || pathname.startsWith("/guide") : pathname.startsWith(item.href);
+          const active =
+            item.href === "/"
+              ? pathname === "/" || pathname.startsWith("/menu") || pathname.startsWith("/guide")
+              : item.id === "booklet"
+                ? pathname === "/booklet" || pathname.startsWith("/booklet/")
+                : pathname.startsWith(item.href);
           return <Link key={item.id} href={item.href} aria-current={active ? "page" : undefined} className={`manzil-menu__dock-link focus-ring${active ? " manzil-menu__dock-link--active" : ""}`}>
             <DockIcon size={19} aria-hidden strokeWidth={2} /><span className={item.id === "faq" ? "manzil-menu__dock-latin" : "urdu"} dir={item.id === "faq" ? "ltr" : undefined}>{copy(language, item.labelEn, item.labelUr)}</span>
           </Link>;
@@ -47,7 +53,7 @@ export function ManzilMainMenu() {
     <ManzilMenuFrame>
         <section className="manzil-menu__welcome" aria-labelledby="manzil-menu-title">
           <div className="manzil-menu__welcome-scene">
-            <img src="/menu-icons/header-bg.jpg" alt="" />
+            <ContentImage src="/menu-icons/header-bg-v2.jpg" alt="" preset="cover" priority />
           </div>
           <div className="manzil-menu__welcome-copy">
             <h1 id="manzil-menu-title" className="manzil-menu__welcome-title">Manzil</h1>
@@ -62,7 +68,7 @@ export function ManzilMainMenu() {
           {MANZIL_MENU_SECTIONS.map((section) => (
             <Link key={section.id} href={`/menu/${section.id}`} className="manzil-menu__section-link focus-ring">
               <span className="manzil-menu__section-art">
-                <img src={section.icon} alt="" className="manzil-menu__section-icon" />
+                <ContentImage src={section.icon} alt="" preset="cover" className="manzil-menu__section-icon" />
               </span>
               <span className="manzil-menu__section-label urdu">{copy(language, section.titleEn, section.titleUr)}</span>
             </Link>

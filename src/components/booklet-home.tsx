@@ -1,42 +1,25 @@
 "use client";
 
-import Link from "next/link";
 import { BookletViewer } from "@/components/booklet-viewer";
-import { PublicIntakeReferenceLink } from "@/components/public-intake-reference";
-import { PublicSiteHeader } from "@/components/public-site-header";
 import { copy, useLocale } from "@/components/locale";
+import { ManzilMenuFrame } from "@/components/manzil-main-menu";
 import { BOOKLET_COVER } from "@/lib/booklet";
 
 export function BookletHome() {
   const { language } = useLocale();
 
   return (
-    <div className="public-page booklet-page booklet-page--home bg-[var(--canvas)]">
-      <PublicSiteHeader maxWidth="booklet" />
-
-      <main id="main-content" className="booklet-page__main mx-auto w-full max-w-[1280px] px-4 py-3 sm:px-8 sm:py-6">
-        <div className="booklet-page__content">
-          <header className="booklet-page__intro text-center sm:text-start">
-            <h1 className="booklet-page__title">
-              {copy(language, BOOKLET_COVER.subtitle.en, BOOKLET_COVER.subtitle.ur)}
-            </h1>
-          </header>
-
-          <div className="booklet-page__reader">
-            <BookletViewer variant="home" />
-          </div>
+    <ManzilMenuFrame>
+      <div className="booklet-page booklet-page--home">
+        <header className="booklet-page__intro">
+          <h1 className="booklet-page__title urdu">
+            {copy(language, BOOKLET_COVER.subtitle.en, BOOKLET_COVER.subtitle.ur)}
+          </h1>
+        </header>
+        <div className="booklet-page__reader">
+          <BookletViewer variant="home" />
         </div>
-      </main>
-
-      <footer className="public-page__footer border-t border-[var(--line)] bg-white py-4">
-        <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-3 px-5 text-sm text-[var(--ink-700)] sm:px-8">
-          <span>© Manzil</span>
-          <div className="flex flex-wrap items-center gap-4">
-            <PublicIntakeReferenceLink />
-            <Link href="/privacy" className="font-semibold text-[var(--navy-900)]">{copy(language, "Privacy", "رازداری")}</Link>
-          </div>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </ManzilMenuFrame>
   );
 }

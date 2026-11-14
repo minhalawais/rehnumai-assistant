@@ -32,4 +32,5 @@ export const BOOKLET_INDEX: BookletIndexEntry[] = [
   { id: "annex-complaints", page: 50, group: BOOKLET_INDEX_GROUPS[3], title: { en: "Annex · Complaint mechanisms", ur: "ضمیمہ · شکایت کے طریقے" } },
 ];
 
+/** Set when the user closes the mobile contents overlay (legacy; no longer auto-opens on visit). */
 export const BOOKLET_INDEX_SESSION_KEY = "rehnumai_booklet_index_intro";

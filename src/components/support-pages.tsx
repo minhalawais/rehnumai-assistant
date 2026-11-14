@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { ManzilMenuFrame } from "@/components/manzil-main-menu";
 import { LinkText } from "@/components/guide-sheet";
+import { ContentImage } from "@/components/content-image";
 import { copy, useLocale } from "@/components/locale";
 import { getSupportGroup, SUPPORT_GROUPS } from "@/lib/support-agencies";
 
@@ -45,7 +46,7 @@ export function SupportHub() {
             return (
               <Link key={group.id} href={`/support/${group.id}`} className={`support-hub__card support-hub__card--${group.id} focus-ring`}>
                 <span className="support-hub__frame">
-                  <img src={art} alt="" className="support-hub__scene" />
+                  <ContentImage src={art} alt="" preset="cover" className="support-hub__scene" />
                 </span>
                 <span className="support-hub__copy">
                   <span className="support-hub__text">
@@ -91,14 +92,14 @@ export function SupportGroupPage({ groupId }: { groupId: string }) {
                   ))}
                 </div>
                 <aside className="agency__mark">
-                  {agency.logo ? <img src={agency.logo} alt="" className="agency__logo" /> : null}
+                  {agency.logo ? <ContentImage src={agency.logo} alt="" preset="logo" sizes="320px" className="agency__logo" /> : null}
                   <h2 className="agency__name urdu">{title}</h2>
                   {agency.website ? (
                     <a className="guide__link" href={agency.website.startsWith("http") ? agency.website : `https://${agency.website}`} target="_blank" rel="noopener noreferrer">
                       {agency.website}
                     </a>
                   ) : null}
-                  {agency.qr ? <img src={agency.qr} alt="" className="agency__qr" /> : null}
+                  {agency.qr ? <ContentImage src={agency.qr} alt="" preset="icon" sizes="112px" className="agency__qr" /> : null}
                 </aside>
               </article>
             );

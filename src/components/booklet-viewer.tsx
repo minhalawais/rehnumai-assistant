@@ -70,24 +70,12 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
   const [indexOpen, setIndexOpen] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [paintedPages, setPaintedPages] = useState<Set<number>>(() => new Set());
   const [nativePdfSrc, setNativePdfSrc] = useState(() => bookletNativePdfSrc(1));
   const pendingScrollPage = useRef<number | null>(null);
   const sideNav = useDesktopSideNav(variant === "home");
   const useNativePdf = useDesktopNativePdf();
   const indexOverlay = indexOpen && !sideNav;
-
-  useEffect(() => {
-    if (sideNav) return;
-    queueMicrotask(() => {
-      try {
-        if (sessionStorage.getItem(BOOKLET_INDEX_SESSION_KEY) !== "1") {
-          setIndexOpen(true);
-        }
-      } catch {
-        setIndexOpen(true);
-      }
-    });
-  }, [sideNav]);
 
   useEffect(() => {
     if (useNativePdf) {
@@ -223,6 +211,41 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
     return () => observer.disconnect();
   }, [indexOverlay, state, pageCount, width, pageHeights, useNativePdf]);
 
+  useEffect(() => {
+    if (useNativePdf || state !== "ready" || !pageHeights) return;
+    const root = scrollRef.current;
+    if (!root) return;
+
+    const markers = Array.from(pageRefs.current.values());
+    if (!markers.length) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        setPaintedPages(prev => {
+          const next = new Set(prev);
+          let changed = false;
+          for (const entry of entries) {
+            const page = Number((entry.target as HTMLElement).dataset.page);
+            if (!page) continue;
+            if (entry.isIntersecting) {
+              if (!next.has(page)) {
+                next.add(page);
+                changed = true;
+              }
+            } else if (next.delete(page)) {
+              changed = true;
+            }
+          }
+          return changed ? next : prev;
+        });
+      },
+      { root, rootMargin: "100% 0px", threshold: 0 },
+    );
+
+    for (const marker of markers) observer.observe(marker);
+    return () => observer.disconnect();
+  }, [state, pageCount, width, pageHeights, useNativePdf]);
+
   function rememberIndexSeen() {
     try {
       sessionStorage.setItem(BOOKLET_INDEX_SESSION_KEY, "1");
@@ -345,7 +368,9 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
                       else pageRefs.current.delete(pageNumber);
                     }}
                   >
-                    <BookletPdfPage pdf={pdf} pageNumber={pageNumber} width={width} language={language} />
+                    {(paintedPages.has(pageNumber) || Math.abs(pageNumber - activePage) <= 1) && (
+                      <BookletPdfPage pdf={pdf} pageNumber={pageNumber} width={width} language={language} />
+                    )}
                   </div>
                 );
               })}
