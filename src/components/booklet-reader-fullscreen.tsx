@@ -2,12 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { List, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { copy, useLocale } from "@/components/locale";
 import { BookletPdfPage, BOOKLET_FULLSCREEN_DIALOG_ID } from "@/components/booklet-pdf-page";
-import { BookletIndexPanel } from "@/components/booklet-index-panel";
+import { BookletComingSoon } from "@/components/booklet-coming-soon";
 import { useBookletHorizontalPager } from "@/hooks/use-booklet-horizontal-pager";
-import { bookletNativePdfSrc } from "@/lib/booklet-page-layout";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 
 type BookletReaderFullscreenProps = {
@@ -16,29 +15,11 @@ type BookletReaderFullscreenProps = {
   page: number;
   pageCount: number;
   onPageChange: (page: number) => void;
-  useNativePdf: boolean;
+  useNativePdf?: boolean;
   pdf: PDFDocumentProxy | null;
   bookletLabel: string;
   returnFocusRef?: React.RefObject<HTMLButtonElement | null>;
 };
-
-function FullscreenNativeSlide({ page, title }: { page: number; title: string }) {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    queueMicrotask(() => setReady(false));
-  }, [page]);
-  return (
-    <div className="booklet-reader-fullscreen__slide-inner">
-      {!ready && <p className="booklet-reader-fullscreen__slide-status" role="status" aria-hidden="true" />}
-      <iframe
-        title={title}
-        className="booklet-reader-fullscreen__iframe"
-        src={bookletNativePdfSrc(page)}
-        onLoad={() => setReady(true)}
-      />
-    </div>
-  );
-}
 
 export function BookletReaderFullscreen({
   open,
@@ -46,16 +27,13 @@ export function BookletReaderFullscreen({
   page,
   pageCount,
   onPageChange,
-  useNativePdf,
   pdf,
-  bookletLabel,
   returnFocusRef,
 }: BookletReaderFullscreenProps) {
   const { language } = useLocale();
   const closeRef = useRef<HTMLButtonElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const [slideWidth, setSlideWidth] = useState(0);
-  const [indexOpen, setIndexOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const { trackRef, prevPage, nextPage } = useBookletHorizontalPager({
@@ -115,18 +93,9 @@ export function BookletReaderFullscreen({
     window.requestAnimationFrame(() => returnFocusRef?.current?.focus());
   }, [onClose, returnFocusRef]);
 
-  const selectFromIndex = useCallback(
-    (target: number) => {
-      onPageChange(target);
-      setIndexOpen(false);
-    },
-    [onPageChange],
-  );
-
   if (!mounted || !open) return null;
 
   const pageLabel = copy(language, `Page ${page} of ${pageCount}`, `صفحہ ${page} از ${pageCount}`);
-
   const slides = [prevPage, page, nextPage] as const;
 
   return createPortal(
@@ -138,18 +107,32 @@ export function BookletReaderFullscreen({
       aria-label={copy(language, "Booklet full screen", "کتابچہ پوری اسکرین")}
     >
       <header className="booklet-reader-fullscreen__head">
-        <button
-          type="button"
-          className="booklet-reader-fullscreen__contents btn-quiet"
-          onClick={() => setIndexOpen(true)}
-          aria-expanded={indexOpen}
-        >
-          <List size={17} aria-hidden="true" />
-          {copy(language, "Contents", "فہرست")}
-        </button>
+        {/* Navigation buttons */}
+        <div className="booklet-reader-fullscreen__nav">
+          <button
+            type="button"
+            className="booklet-reader-fullscreen__nav-btn btn-quiet"
+            onClick={() => onPageChange(1)}
+            disabled={page === 1}
+            aria-label={copy(language, "Previous page (Cover)", "پچھلا صفحہ (سرورق)")}
+          >
+            <ChevronLeft size={20} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="booklet-reader-fullscreen__nav-btn btn-quiet"
+            onClick={() => onPageChange(2)}
+            disabled={page === 2}
+            aria-label={copy(language, "Next page (Coming soon)", "اگلا صفحہ (جلد آ رہا ہے)")}
+          >
+            <ChevronRight size={20} aria-hidden="true" />
+          </button>
+        </div>
+
         <p className="booklet-reader-fullscreen__pages" aria-live="polite">
           {pageLabel}
         </p>
+
         <button
           ref={closeRef}
           type="button"
@@ -169,35 +152,34 @@ export function BookletReaderFullscreen({
           data-testid="booklet-fullscreen-track"
         >
           {slides.map((slidePage, index) => (
-            <div key={index === 0 ? "prev" : index === 1 ? "current" : "next"} className="booklet-reader-fullscreen__slide">
-              {useNativePdf ? (
-                <FullscreenNativeSlide page={slidePage} title={bookletLabel} />
+            <div
+              key={index === 0 ? "prev" : index === 1 ? "current" : "next"}
+              className="booklet-reader-fullscreen__slide"
+            >
+              {slidePage === 2 ? (
+                <div className="booklet-reader-fullscreen__coming-soon-wrap">
+                  <BookletComingSoon
+                    variant="fullscreen"
+                    onBackToCover={() => onPageChange(1)}
+                  />
+                </div>
               ) : pdf && slideWidth > 0 ? (
                 <BookletPdfPage
                   pdf={pdf}
-                  pageNumber={slidePage}
+                  pageNumber={1}
                   width={Math.min(slideWidth - 24, 720)}
                   language={language}
                   className="booklet-reader-fullscreen__page"
                 />
               ) : (
                 <p className="booklet-reader-fullscreen__slide-status" role="status">
-                  {copy(language, "Loading…", "لوڈ ہو رہا ہے…")}
+                  {copy(language, "Loading cover…", "سرورق لوڈ ہو رہا ہے…")}
                 </p>
               )}
             </div>
           ))}
         </div>
       </div>
-
-      {indexOpen && (
-        <BookletIndexPanel
-          open
-          onOpen={() => setIndexOpen(true)}
-          onClose={() => setIndexOpen(false)}
-          onSelectPage={selectFromIndex}
-        />
-      )}
     </div>,
     document.body,
   );
