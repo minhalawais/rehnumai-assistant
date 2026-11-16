@@ -158,10 +158,7 @@ export function BookletReaderFullscreen({
             >
               {slidePage === 2 ? (
                 <div className="booklet-reader-fullscreen__coming-soon-wrap">
-                  <BookletComingSoon
-                    variant="fullscreen"
-                    onBackToCover={() => onPageChange(1)}
-                  />
+                  <BookletComingSoon variant="fullscreen" />
                 </div>
               ) : pdf && slideWidth > 0 ? (
                 <BookletPdfPage

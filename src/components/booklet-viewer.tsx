@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowDown, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { copy, useLocale } from "@/components/locale";
 import { BookletPdfPage, BOOKLET_FULLSCREEN_DIALOG_ID } from "@/components/booklet-pdf-page";
 import { BookletReaderFullscreen } from "@/components/booklet-reader-fullscreen";
@@ -261,18 +261,6 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
                     width={renderWidth}
                     language={language}
                   />
-
-                  {/* Teaser button guiding to Page 2 */}
-                  <button
-                    type="button"
-                    onClick={() => scrollToPage(2)}
-                    className="booklet-viewer__next-teaser focus-ring"
-                  >
-                    <span className="urdu">
-                      {copy(language, "Next: Complete Edition Details (Page 2)", "اگلا صفحہ: مکمل ایڈیشن کی تفصیلات (صفحہ 2)")}
-                    </span>
-                    <ArrowDown size={15} aria-hidden="true" />
-                  </button>
                 </div>
 
                 {/* PAGE 2: The Modern "Coming Soon" Experience */}
@@ -281,10 +269,7 @@ export function BookletViewer({ variant = "embedded" }: BookletViewerProps) {
                   className="booklet-viewer__page-wrap mt-4"
                   data-page={2}
                 >
-                  <BookletComingSoon
-                    variant="embedded"
-                    onBackToCover={() => scrollToPage(1)}
-                  />
+                  <BookletComingSoon variant="embedded" />
                 </div>
               </div>
             )}
