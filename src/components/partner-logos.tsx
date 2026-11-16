@@ -9,12 +9,11 @@ type PartnerLogo = {
 };
 
 const logos: PartnerLogo[] = [
-  { src: "/lrdi.png", alt: "Labour Research and Development Institute" },
   { src: "/puwf_logo.png", alt: "Pakistan United Workers Federation" },
-  { src: "/government_Logo.png", alt: "Government of Pakistan" },
-  { src: "/GC.png", alt: "German Cooperation" },
-  { src: "/eu-flag.svg", alt: "European Union" },
+  { src: "/Action-Logo.png", alt: "Action for Faith in Action" },
   { src: "/ilo_logo.jpg", alt: "International Labour Organization" },
+  { src: "/FOS-01.png", alt: "Fruit of Sustainability" },
+  { src: "/center.png", alt: "Partner organization" },
 ];
 
 type PartnerLogosProps = {

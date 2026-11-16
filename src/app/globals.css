@@ -647,8 +647,9 @@ body.app-splash-lock,body.app-launch-lock { overflow:hidden; }
 .manzil-menu__top { position:sticky; top:0; z-index:20; padding:max(7px,env(safe-area-inset-top)) 14px 7px; border-bottom:1px solid rgba(165,194,215,.42); background:rgba(255,255,255,.86); backdrop-filter:blur(14px); }
 .manzil-menu__top-inner { display:flex; width:min(100%,52rem); min-height:38px; align-items:center; gap:12px; margin-inline:auto; }
 .manzil-menu__top .partner-logos--intro { flex:1; min-width:0; }
-.manzil-menu__top .partner-logos--intro .partner-logos__item { height:32px; }
-.manzil-menu__top .partner-logos--intro .partner-logos__item img { width:auto; height:auto; max-height:28px; max-width:100%; object-fit:contain; }
+.manzil-menu__top .partner-logos--intro .partner-logos__track { justify-content:flex-start; gap:clamp(8px,1.8vw,14px); }
+.manzil-menu__top .partner-logos--intro .partner-logos__item { display:flex; flex:0 1 auto; height:34px; min-width:0; align-items:center; justify-content:flex-start; padding:0; }
+.manzil-menu__top .partner-logos--intro .partner-logos__item img { width:auto; height:auto; max-height:34px; max-width:100%; object-fit:contain; }
 .manzil-menu__top .inline-flex { flex:none; border-color:#d9e5ec; }
 .manzil-menu__top .inline-flex button { min-height:30px; padding-inline:9px; font-size:12px; }
 .manzil-menu__main { display:flex; min-height:0; flex:1; flex-direction:column; width:min(100%,44rem); margin-inline:auto; padding:14px 14px 12px; overflow:auto; }
@@ -713,7 +714,7 @@ body.app-splash-lock,body.app-launch-lock { overflow:hidden; }
 @media(max-width:360px) {
   .manzil-menu__top { padding-inline:8px; }
   .manzil-menu__top-inner { gap:6px; }
-  .manzil-menu__top .partner-logos--intro .partner-logos__track { gap:3px; }
+  .manzil-menu__top .partner-logos--intro .partner-logos__track { gap:6px; }
   .manzil-menu__top .inline-flex button { padding-inline:6px; }
   .manzil-menu__main { padding-inline:10px; }
   .manzil-menu__tile { padding-inline:11px; }
