@@ -11,7 +11,7 @@ type PartnerLogo = {
 const logos: PartnerLogo[] = [
   { src: "/puwf_logo.png", alt: "Pakistan United Workers Federation" },
   { src: "/Action-Logo.png", alt: "Action for Faith in Action" },
-  { src: "/ilo_logo.jpg", alt: "International Labour Organization" },
+  { src: "/ilo_logo.png", alt: "International Labour Organization" },
   { src: "/FOS-01.png", alt: "Fruit of Sustainability" },
   { src: "/center.png", alt: "Partner organization" },
 ];
