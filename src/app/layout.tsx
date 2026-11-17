@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AppLaunchGate } from "@/components/app-launch-gate";
+import { BrandFooter } from "@/components/brand-footer";
 import { LocaleProvider } from "@/components/locale";
 import { resolveMetadataBase, siteConfig } from "@/lib/site-metadata";
 
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             </a>
             {children}
           </AppLaunchGate>
+          <BrandFooter />
         </LocaleProvider>
       </body>
     </html>

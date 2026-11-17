@@ -1570,3 +1570,13 @@ body.app-splash-lock,body.app-launch-lock { overflow:hidden; }
   [lang="ur"] .faq-item__restated { font-size:24px; line-height:1.6; }
   [lang="ur"] .faq-item__q { font-size:16px; }
 }
+.app-brand-footer { position:fixed; inset-inline:0; bottom:0; z-index:29; display:flex; min-height:30px; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; padding:3px 16px max(3px,env(safe-area-inset-bottom)); background:#60BA81; color:#062e43; box-shadow:0 -2px 8px rgba(39,57,76,.08); font-family:Inter,"Noto Sans Arabic",Arial,sans-serif; font-size:13px; font-weight:500; line-height:1.25; text-align:center; }
+.app-brand-footer__prefix { opacity:.95; }
+.app-brand-footer__name { color:#062e43; font-weight:700; text-decoration:none; text-underline-offset:2px; }
+.app-brand-footer__name:hover,.app-brand-footer__name:focus-visible { text-decoration:underline; }
+body:has(.manzil-menu) .app-brand-footer { bottom:calc(67px + env(safe-area-inset-bottom)); }
+.public-page,.app-shell,.information-page,.login-page { padding-bottom:34px; }
+.manzil-menu { padding-bottom:calc(98px + env(safe-area-inset-bottom)); }
+@media(max-width:480px) {
+  .app-brand-footer { gap:5px; padding-inline:8px; }
+}
