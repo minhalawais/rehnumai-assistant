@@ -84,6 +84,19 @@ export const intakeSteps = [
   ["Review", "جوابات دیکھیں"],
 ] as const;
 
+export const intakeScreenSteps = [
+  { en: "Personal data", ur: "ذاتی معلومات" },
+  { en: "Skills and trade", ur: "مہارت اور ہنر" },
+  { en: "Employment and return", ur: "ملازمت اور واپسی" },
+  { en: "Support needed", ur: "درکار مدد" },
+  { en: "Review", ur: "جوابات کا جائزہ" },
+] as const;
+
+export function intakeScreenForSection(section: number) {
+  if (section <= 3) return 0;
+  return section - 3;
+}
+
 export function localizedChoice(value: string | undefined, options: readonly (readonly [string, string, string])[], language: "ur" | "en") {
   if (!value) return "—";
   const choice = options.find(([key]) => key === value);

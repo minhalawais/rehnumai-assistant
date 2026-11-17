@@ -8,7 +8,7 @@ import { PartnerLogos } from "@/components/partner-logos";
 import {
   MANZIL_APP_NAME_EN,
   MANZIL_INTRO_HIGHLIGHTS,
-  MANZIL_INTRO_PARAGRAPHS_UR,
+  MANZIL_INTRO_PARAGRAPHS_EN,
 } from "@/lib/manzil-intro-copy";
 
 const STEP_COUNT = 2;
@@ -42,9 +42,11 @@ export function AppIntro({ onComplete }: AppIntroProps) {
           <ManzilIntroBrand id={step === 0 ? "app-intro-heading" : undefined} />
           {step === 0 && (
             <IntroStep>
-              <p className="app-intro__fulltext app-intro__fulltext--center urdu" lang="ur" dir="rtl">
-                {MANZIL_INTRO_PARAGRAPHS_UR.join(" ")}
-              </p>
+              <div className="app-intro__fulltext app-intro__fulltext--center" lang="en" dir="ltr">
+                {MANZIL_INTRO_PARAGRAPHS_EN.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
             </IntroStep>
           )}
 
